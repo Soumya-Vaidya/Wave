@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <title>Signin</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../static/bootstrap.min.css" rel="stylesheet">
+  <link href="../static/signin.css" rel="stylesheet">
+  <style>
+    #heading {
+      margin-left: 20px;
+      margin-top: 10px;
+      font-family: 'Brush Script MT', cursive;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="heading" class="position-absolute top-0 start-0">
+    <h1>Wave</h1>
+    <h2>Ride your emotions</h2>
+  </div>
+  <main class="form-signin text-center">
+    <form method="post">
+      <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+
+
+      <div class="form-floating">
+        <input type="email" name="email" class="form-control" id="floatingInput" placeholder="email" required>
+        <label for="floatingInput">Email</label>
+      </div>
+      <div class="form-floating">
+        <input type="password" name="passwd" class="form-control" id="floatingPassword" placeholder="Password" required>
+        <label for="floatingPassword">Password</label>
+      </div>
+      <div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+      </div>
+      <br>
+
+    </form>
+    <div>
+
+      <a class="w-100 btn btn-lg btn-secondary" href="/register" role="button">Sign
+        Up</a>
+    </div>
+  </main>
+
+
+
+
+</body>
+
+</html>
