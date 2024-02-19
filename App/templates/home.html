@@ -8,11 +8,23 @@
 </head>
 
 <body>
-    <h1>Enter journal entry</h1>
-    <form action="/home/{{user_id}}" method="POST">
+    <h1>Enter Journal Entry</h1>
+    <form action="/Wave/home/{{user_id}}" method="POST">
         <input type="text" name="entry">
         <input type="submit" value="Add to Journal">
     </form>
+    <h5>
+        <a href="/Wave/{{user_id}}/profile">View Profile</a>
+        <a href="/Wave/{{user_id}}/profile/edit">Edit Profile</a>
+    </h5>
+    <h4>ID : Entry : Emotion : Word Count : Stress Level</h4>
+    {% for journal in journals %}
+    <a href="/Wave/{{journal.user_id}}/{{journal.jid}}">
+        <p> {{ journal.jid }} : {{ journal.emotions }} : {{ journal.word_count }}: {{ journal.stress_level }} </p>
+    </a>
+    {% endfor %}
+
+
 </body>
 
 </html>
