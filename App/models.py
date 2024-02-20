@@ -27,7 +27,7 @@ class Journal(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     entry = db.Column(db.String(500), nullable=False)
     emotions = db.Column(db.String(100), nullable=False)
-    stress_level = db.Column(db.Float, nullable=False)
+    stress_level = db.Column(db.String, nullable=False)
     word_count = db.Column(db.Integer, nullable=False)
 
     # Add the relationship with User

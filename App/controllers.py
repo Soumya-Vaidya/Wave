@@ -22,6 +22,14 @@ with open("model.pkl", "rb") as file:
 with open("vectorizer.pkl", "rb") as file:
     vectorizer = pickle.load(file)
 
+# Load the saved stress model
+with open("stress_model.pkl", "rb") as file:
+    stress = pickle.load(file)
+
+# Load the saved stress vectorizer
+with open("stress_vectorizer.pkl", "rb") as file:
+    stress_vectorizer = pickle.load(file)
+
 
 @app.route("/", methods=["GET", "POST"])
 def landing():
@@ -77,17 +85,21 @@ def home(user_id):
         word_count = entry.count(" ") + 1
         sentences = re.split(r"(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s", entry)
         emotion_list = []
+        avg_stress = 0
         for sentence in sentences:
             # processed_sentence = preprocess_function(sentence)
             sentence_vectorized = vectorizer.transform([sentence])
             emotion_prediction = etc.predict(sentence_vectorized)[0]
             emotion_list.append(emotion_prediction)
 
+        entry_vectorized = stress_vectorizer.transform([entry])
+        stress_prediction = stress.predict(entry_vectorized)[0]
+
         journal = Journal(
             user_id=user_id,
             entry=entry,
             emotions=",".join(emotion_list),
-            stress_level="1000",
+            stress_level=str(stress_prediction),
             word_count=word_count,
         )
         db.session.add(journal)
