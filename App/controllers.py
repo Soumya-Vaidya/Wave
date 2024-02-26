@@ -85,7 +85,6 @@ def home(user_id):
         word_count = entry.count(" ") + 1
         sentences = re.split(r"(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s", entry)
         emotion_list = []
-        avg_stress = 0
         for sentence in sentences:
             # processed_sentence = preprocess_function(sentence)
             sentence_vectorized = vectorizer.transform([sentence])
