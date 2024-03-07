@@ -10,7 +10,7 @@
 <body>
     <h1>Enter Journal Entry</h1>
     <form action="/Wave/home/{{user_id}}" method="POST">
-        <input type="text" name="entry">
+        <input type="text" name="entry" value="{{today_journal.entry}}">
         <input type="submit" value="Add to Journal">
     </form>
     <h5>

@@ -1,8 +1,16 @@
 import pickle
 import re
 
+from transformers import pipeline
+
 import bcrypt
 from flask import redirect, render_template, request, url_for
+
+from datetime import datetime
+
+import pytz
+
+IST = pytz.timezone("Asia/Kolkata")
 
 from app import app
 from models import Journal, User, db
@@ -42,10 +50,10 @@ def landing():
 @app.route("/Wave/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return render_template("index.html")
+        return render_template("login.html")
     else:
         email = request.form["email"]
-        passw = request.form["passwd"]
+        passw = request.form["password"]
         passw = passw.encode()
         usr = User.query.filter_by(email=email).first()
         if usr is None:
@@ -65,7 +73,7 @@ def register():
         if usr:
             return "Email already Exists"
 
-        passw = request.form["passwd"]
+        passw = request.form["password"]
         name = request.form["name"]
 
         passw = passw.encode()
@@ -78,11 +86,21 @@ def register():
 @app.route("/Wave/home/<user_id>", methods=["GET", "POST"])
 def home(user_id):
     if request.method == "GET":
+        date_format = datetime.now(IST).strftime("%dth %B, %Y")
+        date = datetime.now(IST).date()
+        today_journal = Journal.query.filter_by(user_id=user_id, date=date).first()
         journals = Journal.query.filter_by(user_id=user_id).all()
-        return render_template("home.html", user_id=user_id, journals=journals)
+        return render_template(
+            "today.html",
+            user_id=user_id,
+            journals=journals,
+            today_journal=today_journal,
+            date=date_format,
+        )
     elif request.method == "POST":
         entry = request.form["entry"]
         word_count = entry.count(" ") + 1
+
         sentences = re.split(r"(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s", entry)
         emotion_list = []
         for sentence in sentences:
@@ -94,16 +112,32 @@ def home(user_id):
         entry_vectorized = stress_vectorizer.transform([entry])
         stress_prediction = stress.predict(entry_vectorized)[0]
 
-        journal = Journal(
-            user_id=user_id,
-            entry=entry,
-            emotions=",".join(emotion_list),
-            stress_level=str(stress_prediction),
-            word_count=word_count,
-        )
-        db.session.add(journal)
-        db.session.commit()
-        print("Entry added")
+        date = datetime.now(IST).date()
+
+        journal = Journal.query.filter_by(user_id=user_id, date=date).first()
+        if journal:
+            try:
+                journal.entry = entry
+                journal.emotions = ",".join(emotion_list)
+                journal.stress_level = str(stress_prediction)
+                journal.word_count = word_count
+                journal.date = date
+                db.session.commit()
+                print("Entry updated")
+            except:
+                db.session.rollback()
+        else:
+            journal = Journal(
+                user_id=user_id,
+                entry=entry,
+                emotions=",".join(emotion_list),
+                stress_level=str(stress_prediction),
+                word_count=word_count,
+                date=date,
+            )
+            db.session.add(journal)
+            db.session.commit()
+            print("Entry added")
 
         return redirect(url_for("home", user_id=user_id))
 

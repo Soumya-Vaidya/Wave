@@ -1,42 +1,93 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <title>Signup</title>
-    <!-- Bootstrap core CSS -->
-    <link href="../static/bootstrap.min.css" rel="stylesheet">
-    <link href="../static/signup.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Register - Wave</title>
+    <link rel="stylesheet" href="/static/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+    <link rel="stylesheet" href="/static/assets/fonts/fontawesome-all.min.css">
 </head>
 
-<body class="text-center">
-    <main class="form-signup">
-        <form method="post">
-            <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
-
-            <div class="form-floating">
-                <input type="text" name="name" class="form-control" id="floatingInput" placeholder="name" required>
-                <label for="floatingInput">name</label>
+<body class="bg-gradient-primary o-hidden">
+    <div class="container">
+        <div class="card shadow-lg o-hidden border-0 my-4">
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col-lg-5 d-none d-lg-flex">
+                        <div class="flex-grow-1 bg-register-image"
+                            style="background-image: url(/static/assets/img/j1.jpg);">
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="p-3">
+                            <div class="text-center">
+                                <h4 class="text-dark mb-4">Create an Account!</h4>
+                            </div>
+                            <form class="user" method="post">
+                                <div class="row mb-3">
+                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user"
+                                            type="text" id="name" placeholder="Name" name="name" required></div>
+                                    <div class="col-sm-6"><input class="form-control form-control-user" type="url"
+                                            id="profilepic" placeholder="Profile Picture" name="profilepic"></div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user"
+                                            type="text" id="gender" placeholder="Gender" name="gender"></div>
+                                    <div class="col-sm-6"><input class="form-control form-control-user" type="number"
+                                            id="age" placeholder="Age" name="age"></div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user"
+                                            type="number" id="contact" placeholder="Contact Number" name="contact">
+                                    </div>
+                                    <div class="col-sm-6"><input class="form-control form-control-user" type="number"
+                                            id="emergency" placeholder="Emergency Contact Number" name="emergency">
+                                    </div>
+                                </div>
+                                <div class="mb-3"><input class="form-control form-control-user" type="email"
+                                        id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Email Address"
+                                        name="email" required></div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user"
+                                            type="password" id="examplePasswordInput" placeholder="Password"
+                                            name="password"></div>
+                                    <div class="col-sm-6"><input class="form-control form-control-user" type="password"
+                                            id="exampleRepeatPasswordInput" placeholder="Repeat Password"
+                                            name="password_repeat"></div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-6 mb-3 mb-sm-0 text-center">
+                                        <label for="optionsDropdown">Medical History:</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" id="optionsDropdown">
+                                            <option value="a">N/A</option>
+                                            <option value="b">Depression</option>
+                                            <option value="c">PTSD</option>
+                                            <option value="d">Other</option>
+                                            <option value="e">Do not wish to disclose</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary d-block btn-user w-100" type="submit">Register
+                                    Account</button>
+                            </form>
+                            <div class="text-center m-3"><a class="small" href="forgot-password.html">Forgot
+                                    Password?</a></div>
+                            <div class="text-center"><a class="small" href="login.html">Already have an account?
+                                    Login!</a></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="form-floating">
-                <input type="email" name="email" class="form-control" id="floatingInput" placeholder="email" required>
-                <label for="floatingInput">email</label>
-            </div>
-            <div class="form-floating">
-                <input type="password" name="passwd" class="form-control" id="floatingPassword" placeholder="Password"
-                    required>
-                <label for="floatingPassword">Password</label>
-            </div>
-            <div>
-                <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
-            </div>
-            <br>
-
-        </form>
-    </main>
+        </div>
+    </div>
+    <script src="/static/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/assets/js/bs-init.js"></script>
+    <script src="/static/assets/js/theme.js"></script>
 </body>
 
 </html>

@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from sqlalchemy import DateTime, Date, Time
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
@@ -24,7 +25,7 @@ class User(db.Model):
 class Journal(db.Model):
     jid = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, ForeignKey("user.user_id"), nullable=False)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    date = db.Column(Date, nullable=False)
     entry = db.Column(db.String(500), nullable=False)
     emotions = db.Column(db.String(100), nullable=False)
     stress_level = db.Column(db.String, nullable=False)
