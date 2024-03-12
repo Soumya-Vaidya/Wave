@@ -13,7 +13,7 @@ import pytz
 IST = pytz.timezone("Asia/Kolkata")
 
 from app import app
-from models import Journal, User, db
+from models import Journal, User, Emotions, db
 
 salt = bcrypt.gensalt()
 
@@ -37,6 +37,9 @@ with open("stress_model.pkl", "rb") as file:
 # Load the saved stress vectorizer
 with open("stress_vectorizer.pkl", "rb") as file:
     stress_vectorizer = pickle.load(file)
+
+with open("dl_model.pkl", "rb") as file:
+    model = pickle.load(file)
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -101,6 +104,17 @@ def home(user_id):
         entry = request.form["entry"]
         word_count = entry.count(" ") + 1
 
+        emotions = model.predict(entry)[0]
+        # print(emotions)
+        filtered_emotions = [emotion for emotion in emotions if emotion["score"] > 0.1]
+        top_5_emotions = sorted(
+            filtered_emotions, key=lambda x: x["score"], reverse=True
+        )[:5]
+        emotion_dict = {
+            emotion["label"]: emotion["score"] for emotion in top_5_emotions
+        }
+        print(emotion_dict)
+
         sentences = re.split(r"(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s", entry)
         emotion_list = []
         for sentence in sentences:
@@ -124,6 +138,18 @@ def home(user_id):
                 journal.date = date
                 db.session.commit()
                 print("Entry updated")
+
+                emotions = Emotions.query.filter_by(jid=journal.jid).all()
+                for emotion in emotions:
+                    db.session.delete(emotion)
+                db.session.commit()
+                for emotion_name, emotion_value in emotion_dict.items():
+                    emotion = Emotions(
+                        jid=journal.jid, name=emotion_name, value=emotion_value
+                    )
+                    db.session.add(emotion)
+                db.session.commit()
+
             except:
                 db.session.rollback()
         else:
@@ -137,6 +163,14 @@ def home(user_id):
             )
             db.session.add(journal)
             db.session.commit()
+
+            for emotion_name, emotion_value in emotion_dict.items():
+                emotion = Emotions(
+                    jid=journal.jid, name=emotion_name, value=emotion_value
+                )
+                db.session.add(emotion)
+            db.session.commit()
+
             print("Entry added")
 
         return redirect(url_for("home", user_id=user_id))

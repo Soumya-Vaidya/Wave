@@ -33,3 +33,13 @@ class Journal(db.Model):
 
     # Add the relationship with User
     user = relationship("User", back_populates="journals")
+    journal = relationship("Emotions", back_populates="emotion")
+
+
+class Emotions(db.Model):
+    eid = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    jid = db.Column(db.Integer, ForeignKey("journal.jid"), nullable=False)
+    emotion = db.Column(db.String(50), nullable=False)
+    value = db.Column(db.Integer, nullable=False)
+
+    emotion = relationship("Journal", back_populates="journal")
