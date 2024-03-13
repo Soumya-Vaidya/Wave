@@ -4,7 +4,7 @@ import re
 from transformers import pipeline
 
 import bcrypt
-from flask import redirect, render_template, request, url_for
+from flask import redirect, render_template, request, url_for, json
 
 from datetime import datetime
 
@@ -78,10 +78,26 @@ def register():
 
         passw = request.form["password"]
         name = request.form["name"]
+        gender = request.form["gender"]
+        age = request.form["age"]
+        emergency_contact = request.form["emergency_contact"]
+        contact = request.form["contact"]
+        profile_picture = request.form["profile_picture"]
 
         passw = passw.encode()
         hashed_password = bcrypt.hashpw(passw, salt)
-        db.session.add(User(name=name, email=email, password=hashed_password))
+        db.session.add(
+            User(
+                name=name,
+                email=email,
+                password=hashed_password,
+                gender=gender,
+                age=age,
+                emergency_contact=emergency_contact,
+                contact=contact,
+                profile_picture=profile_picture,
+            )
+        )
         db.session.commit()
         return redirect("/")
 
@@ -89,16 +105,33 @@ def register():
 @app.route("/Wave/home/<user_id>", methods=["GET", "POST"])
 def home(user_id):
     if request.method == "GET":
+        user = User.query.filter_by(user_id=user_id).first()
         date_format = datetime.now(IST).strftime("%dth %B, %Y")
         date = datetime.now(IST).date()
         today_journal = Journal.query.filter_by(user_id=user_id, date=date).first()
-        journals = Journal.query.filter_by(user_id=user_id).all()
+        if today_journal:
+            journals = Journal.query.filter_by(user_id=user_id).all()
+            emotions = Emotions.query.filter_by(jid=today_journal.jid).all()
+            label = json.dumps([emotion.emotion_name for emotion in emotions])
+            data = json.dumps([emotion.value for emotion in emotions])
+            print(label)
+            print(data)
+        else:
+            journals = ""
+            emotions = ""
+            label = ""
+            data = ""
+        print(emotions)
+
         return render_template(
             "today.html",
-            user_id=user_id,
+            user=user,
             journals=journals,
             today_journal=today_journal,
             date=date_format,
+            emotions=emotions,
+            label=label,
+            data=data,
         )
     elif request.method == "POST":
         entry = request.form["entry"]
@@ -106,6 +139,7 @@ def home(user_id):
 
         emotions = model.predict(entry)[0]
         # print(emotions)
+        # filters acc to threshold from DL model
         filtered_emotions = [emotion for emotion in emotions if emotion["score"] > 0.1]
         top_5_emotions = sorted(
             filtered_emotions, key=lambda x: x["score"], reverse=True
@@ -115,6 +149,7 @@ def home(user_id):
         }
         print(emotion_dict)
 
+        # predict using our ML model
         sentences = re.split(r"(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s", entry)
         emotion_list = []
         for sentence in sentences:
@@ -123,12 +158,14 @@ def home(user_id):
             emotion_prediction = etc.predict(sentence_vectorized)[0]
             emotion_list.append(emotion_prediction)
 
+        # Stress Detection
         entry_vectorized = stress_vectorizer.transform([entry])
         stress_prediction = stress.predict(entry_vectorized)[0]
 
         date = datetime.now(IST).date()
 
         journal = Journal.query.filter_by(user_id=user_id, date=date).first()
+        # if journal entry already exists, update it
         if journal:
             try:
                 journal.entry = entry
@@ -145,13 +182,14 @@ def home(user_id):
                 db.session.commit()
                 for emotion_name, emotion_value in emotion_dict.items():
                     emotion = Emotions(
-                        jid=journal.jid, name=emotion_name, value=emotion_value
+                        jid=journal.jid, emotion_name=emotion_name, value=emotion_value
                     )
                     db.session.add(emotion)
                 db.session.commit()
 
             except:
                 db.session.rollback()
+        # if new entry for the day
         else:
             journal = Journal(
                 user_id=user_id,
@@ -166,7 +204,7 @@ def home(user_id):
 
             for emotion_name, emotion_value in emotion_dict.items():
                 emotion = Emotions(
-                    jid=journal.jid, name=emotion_name, value=emotion_value
+                    jid=journal.jid, emotion_name=emotion_name, value=emotion_value
                 )
                 db.session.add(emotion)
             db.session.commit()
@@ -187,7 +225,7 @@ def entry(user_id, entry_id):
 def view_profile(user_id):
     if request.method == "GET":
         user = User.query.filter_by(user_id=user_id).first()
-        return render_template("view_profile.html", user=user)
+        return render_template("profile.html", user=user)
     else:
         return render_template("404_error.html")
 
@@ -196,13 +234,21 @@ def view_profile(user_id):
 def edit_profile(user_id):
     if request.method == "GET":
         user = User.query.filter_by(user_id=user_id).first()
-        return render_template("edit_profile.html", user=user)
+        return render_template("profile.html", user=user)
     elif request.method == "POST":
         name = request.form["name"]
+        contact = request.form["contact"]
+        emergency_contact = request.form["emergency_contact"]
+        age = request.form["age"]
+        gender = request.form["gender"]
         try:
             # user = User.query.filter_by(user_id=user_id).first()
             user = db.session.query(User).get(user_id)
             user.name = name
+            user.contact = contact
+            user.emergency_contact = emergency_contact
+            user.age = age
+            user.gender = gender
         except:
             db.session.rollback()
         else:

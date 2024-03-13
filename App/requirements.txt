@@ -13,3 +13,5 @@ setuptools==65.5.0
 SQLAlchemy==2.0.27
 typing_extensions==4.10.0
 Werkzeug==3.0.1
+tranformers==4.38.2
+pytz==2024.1

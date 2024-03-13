@@ -14,9 +14,10 @@ class User(db.Model):
     password = db.Column(db.String(50), nullable=False)
     age = db.Column(db.Integer)
     gender = db.Column(db.String(10))
-    phone_number = db.Column(db.String(15))
+    contact = db.Column(db.String(15))
     emergency_contact = db.Column(db.String(15))
     medical_history = db.Column(db.String(50))
+    profile_picture = db.Column(db.String())
 
     # Add the relationship with Journal
     journals = relationship("Journal", back_populates="user")
@@ -39,7 +40,7 @@ class Journal(db.Model):
 class Emotions(db.Model):
     eid = db.Column(db.Integer, primary_key=True, autoincrement=True)
     jid = db.Column(db.Integer, ForeignKey("journal.jid"), nullable=False)
-    emotion = db.Column(db.String(50), nullable=False)
+    emotion_name = db.Column(db.String(50), nullable=False)
     value = db.Column(db.Integer, nullable=False)
 
     emotion = relationship("Journal", back_populates="journal")
