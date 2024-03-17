@@ -26,12 +26,12 @@
                 </a>
                 <hr class="sidebar-divider my-5">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link active" href="today.html"><i
+                    <li class="nav-item"><a class="nav-link active" href="/Wave/{{user.user_id}}/home"><i
                                 class="fas fa-pen"></i><span>Today</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="overview.html"><i
+                    <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/overview"><i
                                 class="fas fa-calendar-week"></i><span>Overview</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="dashboard.html"><i
-                                class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/analytics"><i
+                                class="fas fa-tachometer-alt"></i><span>Analytics</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="mhr.html"><i class="fas fa-heart"></i><span>Mental
                                 Health Resources</span></a></li>
                 </ul>
@@ -234,17 +234,19 @@
                                 <div class="card-body">
                                     <div class="paper">
                                         <div class="lines">
-                                            <!-- <input type="hidden" name="entry" id="entryField"> -->
                                             <div class="text" contenteditable spellcheck="false">
                                                 {{date}} <br /><br />
-                                                <!-- <span id="displayField">{{today_journal.entry}}</span> -->
-                                                <input type="text" name="entry" value="{{today_journal.entry}}">
-                                                <!-- <input type="submit" value="Add to Journal"> -->
+                                                <textarea name="entry"
+                                                    style="background: transparent; outline: none; border: none; height: 100%;"
+                                                    class="w-100">{{today_journal.entry}}</textarea>
                                             </div>
                                         </div>
                                         <div class="holes hole-top"></div>
                                         <div class="holes hole-middle"></div>
                                         <div class="holes hole-bottom"></div>
+                                    </div>
+                                    <div class="word-count">
+                                        Word Count: <span id="wordCount">{{today_journal.word_count}}</span>
                                     </div>
                                 </div>
 

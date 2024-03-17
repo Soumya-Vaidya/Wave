@@ -2,14 +2,274 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wave</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Today</title>
+    <link rel="stylesheet" href="/static/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+    <link rel="stylesheet" href="/static/assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="/static/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/assets/css/notepad.css">
+    <link rel="stylesheet" href="/static/calender/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
 </head>
 
-<body>
-    <h1>Date: {{entry.timestamp}} </h1>
-    <p>{{entry.entry}}</p>
+<body id="page-top" style="overflow: hidden;">
+    <div id="wrapper">
+        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+            <div class="container-fluid d-flex flex-column p-0"><a
+                    class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                    <div class="logo mt-3"><img src="/static/assets/img/wavelogo.png" alt="" width="200px"></div>
+                </a>
+                <hr class="sidebar-divider my-5">
+                <ul class="navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item"><a class="nav-link active" href="/Wave/{{user.user_id}}/home"><i
+                                class="fas fa-pen"></i><span>Today</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/overview"><i
+                                class="fas fa-calendar-week"></i><span>Overview</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html"><i
+                                class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="mhr.html"><i class="fas fa-heart"></i><span>Mental
+                                Health Resources</span></a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                    <h3>Today</h3>
+                    <div class="container-fluid">
+                        <ul class="navbar-nav flex-nowrap ms-auto">
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link"
+                                        aria-expanded="false" data-bs-toggle="dropdown" href="#"><span
+                                            class="badge bg-danger badge-counter">2+</span><i
+                                            class="fas fa-bell fa-fw"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
+                                        <h6 class="dropdown-header">alerts center</h6>
+                                        {% if today_journal == "" %}
+                                        <a class="dropdown-item d-flex align-items-center" href="#">
+                                            <div class="me-3">
+                                                <div class="bg-primary icon-circle"><i
+                                                        class="fas fa-file-alt text-white"></i></div>
+                                            </div>
+
+                                            <div><span class="small text-gray-500">{{date}}</span>
+                                                <p>Hey, you haven't filled up today's journal entry!</p>
+                                            </div>
+                                        </a>
+                                        {% else %}
+                                        <a class="dropdown-item d-flex align-items-center" href="#">
+                                            <div class="me-3">
+                                                <div class="bg-primary icon-circle"><i
+                                                        class="fas fa-file-alt text-white"></i></div>
+                                            </div>
+
+                                            <div><span class="small text-gray-500">{{date}}</span>
+                                                <p>Daily Streak Intact!</p>
+                                            </div>
+                                        </a>
+                                        {% endif %}
+                                        <a class="dropdown-item d-flex align-items-center" href="#">
+                                            <div class="me-3">
+                                                <div class="bg-success icon-circle"><i
+                                                        class="fas fa-donate text-white"></i></div>
+                                            </div>
+                                            <div><span class="small text-gray-500">{{date}}</span>
+                                                <p>Reminder: Take a deep breath. </p>
+                                            </div>
+                                        </a>
+                                        <!-- <a class="dropdown-item d-flex align-items-center" href="#">
+                                            <div class="me-3">
+                                                <div class="bg-warning icon-circle"><i
+                                                        class="fas fa-exclamation-triangle text-white"></i></div>
+                                            </div>
+                                            <div><span class="small text-gray-500">{{date}}</span>
+                                                <p>{{today_journal.emotions}}</p>
+                                            </div>
+                                        </a> -->
+                                        <a class="dropdown-item text-center small text-gray-500" href="#">Show All
+                                            Alerts
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            <div class="d-none d-sm-block topbar-divider"></div>
+                            <li class="nav-item dropdown no-arrow">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link"
+                                        aria-expanded="false" data-bs-toggle="dropdown" href="#"><span
+                                            class="d-none d-lg-inline me-2 text-gray-600 small">{{user.name}}</span><img
+                                            class="border rounded-circle img-profile"
+                                            src="/static/assets/img/avatars/avatar1.jpeg"></a>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
+                                        <a class="dropdown-item" href="/Wave/{{user.user_id}}/profile/edit">
+                                            <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400">
+                                            </i>&nbsp;Profile
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="/">
+                                            <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400">
+                                            </i>&nbsp;Logout</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-5 col-xl-4">
+                            <div class="card shadow mb-4">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h6 class="text-primary fw-bold m-0">Analysis</h6>
+                                    <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle"
+                                            aria-expanded="false" data-bs-toggle="dropdown" type="button"><i
+                                                class="fas fa-ellipsis-v text-gray-400"></i></button>
+                                        <!-- <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                                            <p class="text-center dropdown-header">dropdown header:</p><a
+                                                class="dropdown-item" href="#">&nbsp;Action</a><a class="dropdown-item"
+                                                href="#">&nbsp;Another action</a>
+                                            <div class="dropdown-divider"></div><a class="dropdown-item"
+                                                href="#">&nbsp;Something else here</a>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <!-- Doughnut Chart -->
+                                        <canvas id="doughnutChart" width="400px" height="400px"></canvas>
+                                        {% block javascript %}
+                                        <script>
+                                            const emotions = {
+                                                neutral: '#CCCCCC',
+                                                approval: '#82D8D8',
+                                                admiration: '#FFBEF1',
+                                                annoyance: '#FF6347',
+                                                disapproval: '#B22222',
+                                                realization: '#87CEEB',
+                                                gratitude: '#CBEAD8',
+                                                disappointment: '#4169E1',
+                                                curiosity: '#FFD1BB',
+                                                optimism: '#73D76F',
+                                                joy: '#FFFFA4',
+                                                anger: '#FF4500',
+                                                amusement: '#FF69B4',
+                                                confusion: '#8A2BE2',
+                                                love: '#FF1493',
+                                                sadness: '#4682B4',
+                                                caring: '#E790E7',
+                                                excitement: '#FFA500',
+                                                disgust: '#808080',
+                                                surprise: '#FFD700',
+                                                desire: '#580000',
+                                                fear: '#800080',
+                                                embarrassment: '#D5F4FF',
+                                                remorse: '#051C60',
+                                                nervousness: '#688EF5',
+                                                pride: '#EF9E64',
+                                                relief: '#00641B',
+                                                grief: '#363049'
+                                            };
+                                            labels = JSON.parse({{ label | tojson }});
+                                            data = JSON.parse({{ data | tojson }});
+                                            document.addEventListener("DOMContentLoaded", () => {
+                                                new Chart(document.querySelector('#doughnutChart'), {
+                                                    type: 'doughnut',
+                                                    data: {
+                                                        labels: labels,
+                                                        datasets: [{
+                                                            data: data,
+                                                            backgroundColor: labels.map(label => emotions[label]),
+                                                            hoverOffset: 4,
+                                                        }]
+                                                    }
+                                                });
+                                            });
+                                        </script>
+                                        {% endblock %}
+                                        <!-- End Doughnut Chart -->
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div>
+                                <div class="card shadow text-white" style="opacity: 0.5;">
+                                    {% if today_journal.stress_level == "Stress" %}
+                                    <div class="card-body"
+                                        style="background-color: red; color: white; border-radius: 5px; padding: 10px;">
+                                        <p class="m-0">{{ today_journal.stress_level }} detected! Take a deep
+                                            breath.
+                                        </p>
+                                    </div>
+                                    {% elif today_journal.stress_level == "No Stress" %}
+                                    <div class="card-body text-black"
+                                        style="background-color:limegreen; color: black;border-radius: 5px; padding: 10px;">
+                                        <p class="m-0">Everything looks good! {{ today_journal.stress_level }}
+                                            Detected
+                                        </p>
+                                    </div>
+                                    {% else %}
+                                    <div class="card-body text-black"
+                                        style="background-color:orange; color: black;border-radius: 5px; padding: 10px;">
+                                        <p class="m-0">Journal your thoughts to gain insights!
+
+                                        </p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7 col-xl-8">
+                            <div class="card shadow mb-4">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h6 class="text-primary fw-bold m-0">Make an Entry</h6>
+
+                                    <div class="d-flex align-items-center">
+
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="paper">
+                                        <div class="lines">
+                                            <div class="text" spellcheck="false">
+                                                {{today_journal.date}} <br /><br />
+                                                {{today_journal.entry}} </div>
+                                        </div>
+                                        <div class="holes hole-top"></div>
+                                        <div class="holes hole-middle"></div>
+                                        <div class="holes hole-bottom"></div>
+                                    </div>
+                                    <div class="word-count">
+                                        Word Count: <span id="wordCount">{{today_journal.word_count}}</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © Wave 2024</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    </div>
+
+    <script src="/static/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/assets/js/chart.min.js"></script>
+    <script src="/static/assets/js/bs-init.js"></script>
+    <script src="/static/assets/js/theme.js"></script>
+    <script src="/static/calender/js/jquery.min.js"></script>
+    <script src="/static/calender/js/popper.js"></script>
+    <script src="/static/calender/js/bootstrap.min.js"></script>
+    <script src="/static/calender/js/main.js"></script>
 </body>
 
 </html>

@@ -4,9 +4,9 @@ import re
 from transformers import pipeline
 
 import bcrypt
-from flask import redirect, render_template, request, url_for, json
+from flask import redirect, render_template, request, url_for, json, jsonify
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytz
 
@@ -102,7 +102,7 @@ def register():
         return redirect("/")
 
 
-@app.route("/Wave/home/<user_id>", methods=["GET", "POST"])
+@app.route("/Wave/<user_id>/home", methods=["GET", "POST"])
 def home(user_id):
     if request.method == "GET":
         user = User.query.filter_by(user_id=user_id).first()
@@ -114,14 +114,14 @@ def home(user_id):
             emotions = Emotions.query.filter_by(jid=today_journal.jid).all()
             label = json.dumps([emotion.emotion_name for emotion in emotions])
             data = json.dumps([emotion.value for emotion in emotions])
-            print(label)
-            print(data)
+            # print(label)
+            # print(data)
         else:
             journals = ""
             emotions = ""
             label = ""
             data = ""
-        print(emotions)
+        # print(emotions)
 
         return render_template(
             "today.html",
@@ -138,7 +138,7 @@ def home(user_id):
         word_count = entry.count(" ") + 1
 
         emotions = model.predict(entry)[0]
-        # print(emotions)
+
         # filters acc to threshold from DL model
         filtered_emotions = [emotion for emotion in emotions if emotion["score"] > 0.1]
         top_5_emotions = sorted(
@@ -147,7 +147,10 @@ def home(user_id):
         emotion_dict = {
             emotion["label"]: emotion["score"] for emotion in top_5_emotions
         }
-        print(emotion_dict)
+        # print(emotion_dict)
+
+        major_emotion = max(emotion_dict, key=emotion_dict.get)
+        print(major_emotion)
 
         # predict using our ML model
         sentences = re.split(r"(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s", entry)
@@ -165,17 +168,22 @@ def home(user_id):
         date = datetime.now(IST).date()
 
         journal = Journal.query.filter_by(user_id=user_id, date=date).first()
+
         # if journal entry already exists, update it
         if journal:
             try:
+                # update journal table
                 journal.entry = entry
-                journal.emotions = ",".join(emotion_list)
+                # journal.emotions = ",".join(emotion_list)
+                journal.emotions = major_emotion
                 journal.stress_level = str(stress_prediction)
                 journal.word_count = word_count
                 journal.date = date
                 db.session.commit()
                 print("Entry updated")
+                print(major_emotion)
 
+                # update emotions table
                 emotions = Emotions.query.filter_by(jid=journal.jid).all()
                 for emotion in emotions:
                     db.session.delete(emotion)
@@ -189,12 +197,15 @@ def home(user_id):
 
             except:
                 db.session.rollback()
+
         # if new entry for the day
         else:
+            # add new entry to journal table
             journal = Journal(
                 user_id=user_id,
                 entry=entry,
-                emotions=",".join(emotion_list),
+                # emotions=",".join(emotion_list),
+                emotions=major_emotion,
                 stress_level=str(stress_prediction),
                 word_count=word_count,
                 date=date,
@@ -202,6 +213,7 @@ def home(user_id):
             db.session.add(journal)
             db.session.commit()
 
+            # add emotions to emotions table
             for emotion_name, emotion_value in emotion_dict.items():
                 emotion = Emotions(
                     jid=journal.jid, emotion_name=emotion_name, value=emotion_value
@@ -217,8 +229,61 @@ def home(user_id):
 @app.route("/Wave/<user_id>/<entry_id>", methods=["GET", "POST"])
 def entry(user_id, entry_id):
     if request.method == "GET":
+        user = User.query.filter_by(user_id=user_id).first()
         entry = Journal.query.filter_by(jid=entry_id).first()
-        return render_template("entry.html", entry=entry)
+        if entry:
+            emotions = Emotions.query.filter_by(jid=entry.jid).all()
+            label = json.dumps([emotion.emotion_name for emotion in emotions])
+            data = json.dumps([emotion.value for emotion in emotions])
+
+        return render_template(
+            "entry.html", today_journal=entry, user=user, label=label, data=data
+        )
+
+
+@app.route("/Wave/<user_id>/overview", methods=["GET", "POST"])
+def overview(user_id):
+    if request.method == "GET":
+        user = User.query.filter_by(user_id=user_id).first()
+        journals = Journal.query.filter_by(user_id=user_id).all()
+
+        week_start = datetime.now(IST).date() - timedelta(days=7)
+        week_journals = (
+            Journal.query.filter_by(user_id=user_id)
+            .filter(Journal.date >= week_start)
+            .all()
+        )
+
+        for journal in week_journals:
+            journal.date = journal.date.strftime("%dth %B, %Y")
+
+        return render_template(
+            "overview.html",
+            user=user,
+            journals=journals,
+            week_journals=week_journals,
+        )
+    else:
+        print("Error")
+
+
+@app.route("/Wave/<user_id>/analytics", methods=["GET", "POST"])
+def analytics(user_id):
+    if request.method == "GET":
+        user = User.query.filter_by(user_id=user_id).first()
+        journals = Journal.query.filter_by(user_id=user_id).all()
+        emotions = []
+        for journal in journals:
+            emotions += Emotions.query.filter_by(jid=journal.jid).all()
+
+        label = json.dumps([emotion.emotion_name for emotion in emotions])
+        data = json.dumps([emotion.value for emotion in emotions])
+
+        return render_template(
+            "analytics.html", user=user, journals=journals, label=label, data=data
+        )
+    else:
+        print("Error")
 
 
 @app.route("/Wave/<user_id>/profile", methods=["GET", "POST"])

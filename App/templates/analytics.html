@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>Today</title>
+  <link rel="stylesheet" href="/static/assets/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+  <link rel="stylesheet" href="/static/assets/fonts/fontawesome-all.min.css">
+  <link rel="stylesheet" href="/static/assets/css/notepad.css">
+  <link rel="stylesheet" href="/static/calender/css/style.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+  <div id="wrapper">
+    <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+      <div class="container-fluid d-flex flex-column p-0"><a
+          class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+          <div class="logo mt-3"><img src="/static/assets/img/wavelogo.png" alt="" width="200px"></div>
+        </a>
+        <hr class="sidebar-divider my-5">
+        <ul class="navbar-nav text-light" id="accordionSidebar">
+          <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/home"><i
+                class="fas fa-pen"></i><span>Today</span></a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/overview"><i
+                class="fas fa-calendar-week"></i><span>Overview</span></a></li>
+          <li class="nav-item"><a class="nav-link active" href="/Wave/{{user.user_id}}/analytics"><i
+                class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+          <li class="nav-item"><a class="nav-link" href="mhr.html"><i class="fas fa-heart"></i><span>Mental Health
+                Resources</span></a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="d-flex flex-column" id="content-wrapper">
+      <div id="content">
+        <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+          <h3>Dashboard</h3>
+          <div class="container-fluid">
+            <ul class="navbar-nav flex-nowrap ms-auto">
+              <li class="nav-item dropdown no-arrow mx-1">
+                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false"
+                    data-bs-toggle="dropdown" href="#"><span class="badge bg-danger badge-counter">3+</span><i
+                      class="fas fa-bell fa-fw"></i></a>
+                  <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
+                    <h6 class="dropdown-header">alerts center</h6><a class="dropdown-item d-flex align-items-center"
+                      href="#">
+                      <div class="me-3">
+                        <div class="bg-primary icon-circle"><i class="fas fa-file-alt text-white"></i></div>
+                      </div>
+                      <div><span class="small text-gray-500">December 12, 2019</span>
+                        <p>A new monthly report is ready to download!</p>
+                      </div>
+                    </a><a class="dropdown-item d-flex align-items-center" href="#">
+                      <div class="me-3">
+                        <div class="bg-success icon-circle"><i class="fas fa-donate text-white"></i></div>
+                      </div>
+                      <div><span class="small text-gray-500">December 7, 2019</span>
+                        <p>$290.29 has been deposited into your account!</p>
+                      </div>
+                    </a><a class="dropdown-item d-flex align-items-center" href="#">
+                      <div class="me-3">
+                        <div class="bg-warning icon-circle"><i class="fas fa-exclamation-triangle text-white"></i></div>
+                      </div>
+                      <div><span class="small text-gray-500">December 2, 2019</span>
+                        <p>Spending Alert: We've noticed unusually high spending for your account.</p>
+                      </div>
+                    </a><a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                  </div>
+                </div>
+              </li>
+              <div class="d-none d-sm-block topbar-divider"></div>
+              <li class="nav-item dropdown no-arrow">
+                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" aria-expanded="false"
+                    data-bs-toggle="dropdown" href="#"><span class="d-none d-lg-inline me-2 text-gray-600 small">Valerie
+                      Luna</span><img class="border rounded-circle img-profile"
+                      src="/static/assets/img/avatars/avatar1.jpeg"></a>
+                  <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
+                    <a class="dropdown-item" href="/profile.html">
+                      <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400">
+                      </i>&nbsp;Profile
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">
+                      <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400">
+                      </i>&nbsp;Logout</a>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <div class="container-fluid">
+
+          <div class="row mb-5">
+            <div class="col-12">
+              <!-- Pie Chart -->
+              <div class="col-lg-6 col-xl-6">
+                <div class="card shadow mb-4">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="text-primary fw-bold m-0">Complete Analysis</h6>
+                    <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle"
+                        aria-expanded="false" data-bs-toggle="dropdown" type="button"><i
+                          class="fas fa-ellipsis-v text-gray-400"></i></button>
+                      <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                        <p class="text-center dropdown-header">Filters</p><a class="dropdown-item" href="#">&nbsp;Last
+                          Month</a><a class="dropdown-item" href="#">&nbsp;Last Year</a>
+                        <a class="dropdown-item" href="#">&nbsp;Last 6 months</a>
+                        <!-- <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else
+                          here</a> -->
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body" style="height: 450px;">
+                    <div class="chart-area">
+                      <!-- Doughnut Chart -->
+                      <canvas id="pieChart" width="475px" height="400px"></canvas>
+                      {% block javascript %}
+                      <script>
+                        const emotions = {
+                          neutral: '#CCCCCC',
+                          approval: '#82D8D8',
+                          admiration: '#FFBEF1',
+                          annoyance: '#FF6347',
+                          disapproval: '#B22222',
+                          realization: '#87CEEB',
+                          gratitude: '#CBEAD8',
+                          disappointment: '#4169E1',
+                          curiosity: '#FFD1BB',
+                          optimism: '#73D76F',
+                          joy: '#FFFFA4',
+                          anger: '#FF4500',
+                          amusement: '#FF69B4',
+                          confusion: '#8A2BE2',
+                          love: '#FF1493',
+                          sadness: '#4682B4',
+                          caring: '#E790E7',
+                          excitement: '#FFA500',
+                          disgust: '#808080',
+                          surprise: '#FFD700',
+                          desire: '#580000',
+                          fear: '#800080',
+                          embarrassment: '#D5F4FF',
+                          remorse: '#051C60',
+                          nervousness: '#688EF5',
+                          pride: '#EF9E64',
+                          relief: '#00641B',
+                          grief: '#363049'
+                        };
+                        labels = JSON.parse({{ label | tojson }});
+                        data = JSON.parse({{ data | tojson }});
+                        document.addEventListener("DOMContentLoaded", () => {
+                          new Chart(document.querySelector('#pieChart'), {
+                            type: 'pie',
+                            data: {
+                              labels: labels,
+                              datasets: [{
+                                data: data,
+                                backgroundColor: labels.map(label => emotions[label]),
+                                hoverOffset: 4,
+                              }]
+                            },
+                            options: {
+                              responsive: false,
+                              legend: {
+                                position: 'left',
+                                align: 'center'
+                              }
+                            }
+                          });
+                        });
+                      </script>
+                      {% endblock %}
+                      <!-- End Doughnut Chart -->
+                    </div>
+
+                  </div>
+                </div>
+                <div>
+
+                </div>
+              </div>
+              <!-- End Pie CHart -->
+            </div>
+          </div>
+          <div class="row m-5">
+            <div class="col-12">
+              <!-- Line Chart -->
+              <canvas id="lineChart" style="max-height: 400px;"></canvas>
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new Chart(document.querySelector('#lineChart'), {
+                    type: 'line',
+                    data: {
+                      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                      datasets: [{
+                        label: 'Line Chart',
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                      }]
+                    },
+                    options: {
+                      scales: {
+                        y: {
+                          beginAtZero: true
+                        }
+                      }
+                    }
+                  });
+                });
+              </script>
+              <!-- End Line CHart -->
+            </div>
+          </div>
+          <div class="row m-5">
+            <div class="col-4">
+
+            </div>
+            <div class="col-4">
+            </div>
+            <div class="col-4">
+            </div>
+          </div>
+          <div class="row m-5">
+            <div class="col-6">
+              <!-- Bubble Chart -->
+              <canvas id="bubbleChart" style="max-height: 400px;"></canvas>
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new Chart(document.querySelector('#bubbleChart'), {
+                    type: 'bubble',
+                    data: {
+                      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                      datasets: [{
+                        label: 'Dataset 1',
+                        data: [{
+                          x: 20,
+                          y: 30,
+                          r: 15
+                        },
+                        {
+                          x: 40,
+                          y: 10,
+                          r: 10
+                        },
+                        {
+                          x: 15,
+                          y: 37,
+                          r: 12
+                        },
+                        {
+                          x: 32,
+                          y: 42,
+                          r: 33
+                        }
+                        ],
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)'
+                      },
+                      {
+                        label: 'Dataset 2',
+                        data: [{
+                          x: 40,
+                          y: 25,
+                          r: 22
+                        },
+                        {
+                          x: 24,
+                          y: 47,
+                          r: 11
+                        },
+                        {
+                          x: 65,
+                          y: 11,
+                          r: 14
+                        },
+                        {
+                          x: 11,
+                          y: 55,
+                          r: 8
+                        }
+                        ],
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)'
+                      }
+                      ]
+                    },
+                    options: {
+                      responsive: true,
+                      plugins: {
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Chart.js Bubble Chart'
+                        }
+                      }
+                    }
+                  });
+                });
+              </script>
+              <!-- End Bubble Chart -->
+            </div>
+            <div class="col-6">
+              <!-- Bar Chart -->
+              <canvas id="barChart" style="max-height: 400px;"></canvas>
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new Chart(document.querySelector('#barChart'), {
+                    type: 'bar',
+                    data: {
+                      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                      datasets: [{
+                        label: 'Bar Chart',
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                        backgroundColor: [
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(255, 159, 64, 0.2)',
+                          'rgba(255, 205, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(201, 203, 207, 0.2)'
+                        ],
+                        borderColor: [
+                          'rgb(255, 99, 132)',
+                          'rgb(255, 159, 64)',
+                          'rgb(255, 205, 86)',
+                          'rgb(75, 192, 192)',
+                          'rgb(54, 162, 235)',
+                          'rgb(153, 102, 255)',
+                          'rgb(201, 203, 207)'
+                        ],
+                        borderWidth: 1
+                      }]
+                    },
+                    options: {
+                      scales: {
+                        y: {
+                          beginAtZero: true
+                        }
+                      }
+                    }
+                  });
+                });
+              </script>
+              <!-- End Bar CHart -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="bg-white sticky-footer">
+        <div class="container my-auto">
+          <div class="text-center my-auto copyright"><span>Copyright © Wave 2024</span></div>
+        </div>
+      </footer>
+    </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+  </div>
+  <script src="/static/assets/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/static/assets/js/chart.min.js"></script>
+  <script src="assets/js/bs-init.js"></script>
+  <script src="/static/assets/js/theme.js"></script>
+  <script src="/static/calender/js/jquery.min.js"></script>
+  <script src="/static/calender/js/popper.js"></script>
+  <script src="/static/calender/js/bootstrap.min.js"></script>
+  <script src="/static/calender/js/main.js"></script>
+</body>
+
+</html>
