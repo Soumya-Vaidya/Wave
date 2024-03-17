@@ -279,8 +279,24 @@ def analytics(user_id):
         label = json.dumps([emotion.emotion_name for emotion in emotions])
         data = json.dumps([emotion.value for emotion in emotions])
 
+        stress_count = Journal.query.filter_by(
+            user_id=user_id, stress_level="Stress"
+        ).count()
+        no_stress_count = Journal.query.filter_by(
+            user_id=user_id, stress_level="No Stress"
+        ).count()
+
+        stress_label = json.dumps(["Stress", "No Stress"])
+        stress_data = json.dumps([stress_count, no_stress_count])
+
         return render_template(
-            "analytics.html", user=user, journals=journals, label=label, data=data
+            "analytics.html",
+            user=user,
+            journals=journals,
+            label=label,
+            data=data,
+            stress_label=stress_label,
+            stress_data=stress_data,
         )
     else:
         print("Error")

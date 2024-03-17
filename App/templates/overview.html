@@ -35,7 +35,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Overview</title>
+    <title>Wave: Overview</title>
     <link rel="stylesheet" href="/static/assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
@@ -64,8 +64,8 @@
                     <li class="nav-item"><a class="nav-link active" href="/Wave/{{user.user_id}}/overview"><i
                                 class="fas fa-calendar-week"></i><span>Overview</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/analytics"><i
-                                class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="mhr.html"><i class="fas fa-heart"></i><span>Mental
+                                class="fas fa-tachometer-alt"></i><span>Analytics</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-heart"></i><span>Mental
                                 Health Resources</span></a></li>
                 </ul>
             </div>
@@ -117,7 +117,7 @@
                             <li class="nav-item dropdown no-arrow">
                                 <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link"
                                         aria-expanded="false" data-bs-toggle="dropdown" href="#"><span
-                                            class="d-none d-lg-inline me-2 text-gray-600 small">Valerie Luna</span><img
+                                            class="d-none d-lg-inline me-2 text-gray-600 small">{{user.name}}</span><img
                                             class="border rounded-circle img-profile"
                                             src="/static/assets/img/avatars/avatar1.jpeg"></a>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
