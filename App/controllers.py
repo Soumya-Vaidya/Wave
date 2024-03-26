@@ -276,8 +276,15 @@ def analytics(user_id):
         for journal in journals:
             emotions += Emotions.query.filter_by(jid=journal.jid).all()
 
-        label = json.dumps([emotion.emotion_name for emotion in emotions])
-        data = json.dumps([emotion.value for emotion in emotions])
+        emotions_dict = {}
+        for emotion in emotions:
+            if emotion.emotion_name in emotions_dict:
+                emotions_dict[emotion.emotion_name] += emotion.value
+            else:
+                emotions_dict[emotion.emotion_name] = emotion.value
+
+        label = json.dumps(list(emotions_dict.keys()))
+        data = json.dumps(list(emotions_dict.values()))
 
         stress_count = Journal.query.filter_by(
             user_id=user_id, stress_level="Stress"
