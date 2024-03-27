@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Mental Health Resources</title>
+    <link rel="stylesheet" href="/static/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+    <link rel="stylesheet" href="/static/assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="/static//assets/css/notepad.css">
+    <link rel="stylesheet" href="/static/calender/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+    <style>
+        .grid {
+            height: 50px;
+            width: 200px;
+        }
+    </style>
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+            <div class="container-fluid d-flex flex-column p-0"><a
+                    class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                    <div class="logo mt-5 pt-5">
+                        <img src="/static/assets/img/wavelogo.png" alt="" width="200px">
+                    </div>
+                </a>
+                <hr class="sidebar-divider my-5">
+                <ul class="navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/home"><i
+                                class="fas fa-pen"></i><span>Today</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/overview"><i
+                                class="fas fa-calendar-week"></i><span>Overview</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/analytics"><i
+                                class="fas fa-tachometer-alt"></i><span>Analytics</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/Wave/mhr"><i
+                                class="fas fa-heart"></i><span>Mental Health Resources</span></a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                    <h3>Resources</h3>
+                    <div class="container-fluid">
+                        <ul class="navbar-nav flex-nowrap ms-auto">
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link"
+                                        aria-expanded="false" data-bs-toggle="dropdown" href="#"><span
+                                            class="badge bg-danger badge-counter">3+</span><i
+                                            class="fas fa-bell fa-fw"></i></a>
+                                    <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
+                                        <h6 class="dropdown-header">alerts center</h6><a
+                                            class="dropdown-item d-flex align-items-center" href="#">
+                                            <div class="me-3">
+                                                <div class="bg-primary icon-circle"><i
+                                                        class="fas fa-file-alt text-white"></i></div>
+                                            </div>
+                                            <div><span class="small text-gray-500">December 12, 2019</span>
+                                                <p>A new monthly report is ready to download!</p>
+                                            </div>
+                                        </a><a class="dropdown-item d-flex align-items-center" href="#">
+                                            <div class="me-3">
+                                                <div class="bg-success icon-circle"><i
+                                                        class="fas fa-donate text-white"></i></div>
+                                            </div>
+                                            <div><span class="small text-gray-500">December 7, 2019</span>
+                                                <p>$290.29 has been deposited into your account!</p>
+                                            </div>
+                                        </a><a class="dropdown-item d-flex align-items-center" href="#">
+                                            <div class="me-3">
+                                                <div class="bg-warning icon-circle"><i
+                                                        class="fas fa-exclamation-triangle text-white"></i></div>
+                                            </div>
+                                            <div><span class="small text-gray-500">December 2, 2019</span>
+                                                <p>Spending Alert: We've noticed unusually high spending for your
+                                                    account.</p>
+                                            </div>
+                                        </a><a class="dropdown-item text-center small text-gray-500" href="#">Show All
+                                            Alerts</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <div class="d-none d-sm-block topbar-divider"></div>
+                            <li class="nav-item dropdown no-arrow">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link"
+                                        aria-expanded="false" data-bs-toggle="dropdown" href="#"><span
+                                            class="d-none d-lg-inline me-2 text-gray-600 small">{{user.name}}</span><img
+                                            class="border rounded-circle img-profile"
+                                            src="/static/assets/img/avatars/avatar1.jpeg"></a>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
+                                        <a class="dropdown-item" href="/Wave/{{user.user_id}}/profile/edit">
+                                            <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400">
+                                            </i>&nbsp;Profile
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400">
+                                            </i>&nbsp;Logout</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="container-fluid">
+                    <div class="container">
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <h3>Self-Care Practices</h3>
+                                    <div class="col-md-4 mt-3">
+                                        <div class="card" style="height: 90%; width: 100%;">
+                                            <img src="/static/assets/img/mhr/1.jpg" class="card-img-top" height="100%"
+                                                width="100%">
+                                            <div class="card-img-overlay">
+                                                <a target="_blank"
+                                                    href="https://www.goodhousekeeping.com/health/wellness/g25643343/self-care-ideas/">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title text-center">Activities</h5>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mt-3">
+                                        <div class="card" style="height: 90%; width: 100%;">
+                                            <img src="/static/assets/img/mhr/2.jpg" class="card-img-top" height="100%"
+                                                width="100%">
+                                            <div class="card-img-overlay">
+                                                <a target="_blank"
+                                                    href="https://www.penguinrandomhouse.com/the-read-down/best-books-guide-self-care-fall/">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title text-center">Books</h5>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mt-3">
+                                        <div class="card" style="height: 90%; width: 102%;">
+                                            <img src="/static/assets/img/mhr/3.jpg" class="card-img-top" height="100%"
+                                                width="100%">
+                                            <div class="card-img-overlay">
+                                                <a target="_blank"
+                                                    href="https://blog.gratefulness.me/self-care-affirmations/">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title text-center">Affirmations</h5>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <h3>Journaling Ideas</h3>
+                                    <div class="col-md-4 mt-3">
+                                        <div class="card" style="height: 90%; width: 100%;">
+                                            <img src="/static/assets/img/mhr/4.jpg" class="card-img-top" height="100%"
+                                                width="100%">
+                                            <div class="card-img-overlay">
+                                                <a target="_blank"
+                                                    href="https://vanillapapers.net/2019/11/13/journaling-tips/">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title text-center">Tips</h5>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mt-3">
+                                        <div class="card" style="height: 90%; width: 100%;">
+                                            <img src="/static/assets/img/mhr/5.jpg" class="card-img-top" height="100%"
+                                                width="100%">
+                                            <div class="card-img-overlay">
+                                                <a target="_blank"
+                                                    href=https://vanillapapers.net/2020/08/25/journaling-techniques />
+                                                <div class="card-body">
+                                                    <h5 class="card-title text-center">Techniques</h5>
+                                                </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mt-3">
+                                        <div class="card" style="height: 90%; width: 100%;">
+                                            <img src="/static/assets/img/mhr/6.jpg" class="card-img-top" height="100%"
+                                                width="100%">
+                                            <div class="card-img-overlay">
+                                                <a target="_blank" href="https://dayoneapp.com/blog/journal-prompts/">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title text-center">Prompts</h5>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card" style="height: 100;">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center">Distress Helplines for India</h5>
+                                        <p class="card-text text-center">Updated March 2024
+                                            <br><br>
+                                            Tele MANAS (Government Initiative)
+                                            <br>1800 891 4416
+                                            <br>(Available 24/7)
+                                            <br><a target="_blank"
+                                                href="https://telemanas.mohfw.gov.in/#/home">Website</a>
+                                            <br><br>
+                                            iCALL Psychosocial Helpline
+                                            <br>+91 9152 987 821
+                                            <br>(Monday to Saturday, 10am to 8pm)
+                                            <br><a target="_blank" href="https://icallhelpline.org/">Website</a>
+                                            <br><br>
+                                            Vandrevala Foundation
+                                            <br>+91 9999 666 555
+                                            <br>(Available 24/7)
+                                            <br><a target="_blank"
+                                                href="https://www.vandrevalafoundation.com/free-counseling">Website</a>
+                                            <br><br>
+                                            Manastha
+                                            <br>Online Therapy Platform
+                                            <br><a target="_blank" href="https://www.manastha.com/">Website</a>
+                                            <br>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © Wave 2024</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    </div>
+    <script src="/static/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/assets/js/chart.min.js"></script>
+    <script src="/static/assets/js/bs-init.js"></script>
+    <script src="/static/assets/js/theme.js"></script>
+    <script src="/static/calender/js/jquery.min.js"></script>
+    <script src="/static/calender/js/popper.js"></script>
+    <script src="/static/calender/js/bootstrap.min.js"></script>
+    <script src="/static/calender/js/main.js"></script>
+</body>
+
+</html>

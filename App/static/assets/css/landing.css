@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700&display=swap');
 
 :root {
-    --red: lightblue;
+    --red: #007bff;
 }
 
 * {
@@ -440,7 +440,7 @@ header .navbar a:hover {
 }
 
 .footer .credit span {
-    color: var(--red);
+    color: #007bff;
 }
 
 #scroll-top {

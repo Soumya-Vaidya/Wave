@@ -14,6 +14,7 @@ IST = pytz.timezone("Asia/Kolkata")
 
 from app import app
 from models import Journal, User, Emotions, db
+from dateutil.relativedelta import relativedelta
 
 salt = bcrypt.gensalt()
 
@@ -271,6 +272,8 @@ def overview(user_id):
 def analytics(user_id):
     if request.method == "GET":
         user = User.query.filter_by(user_id=user_id).first()
+
+        # Emotions Pie Chart
         journals = Journal.query.filter_by(user_id=user_id).all()
         emotions = []
         for journal in journals:
@@ -286,6 +289,11 @@ def analytics(user_id):
         label = json.dumps(list(emotions_dict.keys()))
         data = json.dumps(list(emotions_dict.values()))
 
+        # Total Word Count and Entries
+        total_word_count = sum(journal.word_count for journal in journals)
+        total_entries = Journal.query.filter_by(user_id=user_id).count()
+
+        # Stress Level Pie Chart
         stress_count = Journal.query.filter_by(
             user_id=user_id, stress_level="Stress"
         ).count()
@@ -296,6 +304,131 @@ def analytics(user_id):
         stress_label = json.dumps(["Stress", "No Stress"])
         stress_data = json.dumps([stress_count, no_stress_count])
 
+        # Count the longest number of continuous days with journal entries
+        longest_continuous_days = 0
+        current_continuous_days = 0
+        previous_date = None
+
+        for journal in journals:
+            current_date = journal.date
+            if previous_date is None or (current_date - previous_date).days == 1:
+                current_continuous_days += 1
+            else:
+                current_continuous_days = 1
+
+            if current_continuous_days > longest_continuous_days:
+                longest_continuous_days = current_continuous_days
+
+            previous_date = current_date
+
+        print("Longest continuous days with journal entries:", longest_continuous_days)
+
+        # Count the number of continuous days since today in the journal table
+        continuous_days = 0
+        previous_date = None
+
+        for journal in journals:
+            if previous_date is None:
+                continuous_days += 1
+            elif journal.date == previous_date - timedelta(days=1):
+                continuous_days += 1
+            else:
+                break
+            previous_date = journal.date
+
+        print("Number of continuous days since today:", continuous_days)
+
+        # Last month word count Line Chart
+        last_month_start = datetime.now(IST).date() - timedelta(days=30)
+        last_month_journals = (
+            Journal.query.filter_by(user_id=user_id)
+            .filter(Journal.date >= last_month_start)
+            .all()
+        )
+
+        word_counts = []
+        last_month_dates = []
+
+        for i in range(30):
+            date = (datetime.now(IST).date() - timedelta(days=i)).strftime(
+                "%dth %B, %Y"
+            )
+            last_month_dates.append(date)
+
+            found_journal = False
+            for journal in last_month_journals:
+                if journal.date.strftime("%dth %B, %Y") == date:
+                    word_counts.append(journal.word_count)
+                    found_journal = True
+                    break
+
+            if not found_journal:
+                word_counts.append(0)
+
+        word_counts.reverse()
+        last_month_dates.reverse()
+
+        # Last 12 months emotions count
+        last_12_months_emotions = []
+        max_occurred_emotions = []
+        emotion_counts = []
+
+        current_month = (
+            datetime.now(IST).date().replace(day=1)
+        )  # Get the first day of the current month
+
+        for i in range(12):
+            month_start = current_month - relativedelta(months=i)
+            month_end = month_start + relativedelta(
+                day=31
+            )  # Get the last day of the month
+            month_journals = (
+                Journal.query.filter_by(user_id=user_id)
+                .filter(Journal.date >= month_start, Journal.date <= month_end)
+                .all()
+            )
+
+            emotions_dict = {}
+            for journal in month_journals:
+                emotions = Journal.query.filter_by(jid=journal.jid).all()
+                for emotion in emotions:
+                    if emotion.emotions in emotions_dict:
+                        emotions_dict[emotion.emotions] += 1
+                    else:
+                        emotions_dict[emotion.emotions] = 1
+
+            if emotions_dict:
+                max_emotion = max(emotions_dict, key=emotions_dict.get)
+                max_count = emotions_dict[max_emotion]
+
+                # Check if there are multiple emotions with the same count
+                multiple_emotions = [
+                    emotion
+                    for emotion, count in emotions_dict.items()
+                    if count == max_count
+                ]
+
+                if len(multiple_emotions) > 1:
+                    # Fetch the emotion with the maximum value from the Emotions dataset
+                    max_emotion = max(
+                        multiple_emotions,
+                        key=lambda emotion: Emotions.query.filter_by(
+                            emotion_name=emotion
+                        )
+                        .first()
+                        .value,
+                    )
+
+                max_count = emotions_dict[max_emotion]
+            else:
+                max_emotion = "No Emotion"
+                max_count = 0
+
+            last_12_months_emotions.append(month_start.strftime("%B, %Y"))
+            max_occurred_emotions.append(max_emotion)
+            emotion_counts.append(max_count)
+        print(last_12_months_emotions, max_occurred_emotions, emotion_counts)
+
         return render_template(
             "analytics.html",
             user=user,
@@ -304,6 +437,15 @@ def analytics(user_id):
             data=data,
             stress_label=stress_label,
             stress_data=stress_data,
+            word_counts=word_counts,
+            last_month_dates=last_month_dates,
+            last_12_months_emotions=last_12_months_emotions,
+            max_occurred_emotions=max_occurred_emotions,
+            emotion_counts=emotion_counts,
+            total_word_count=total_word_count,
+            total_entries=total_entries,
+            longest_continuous_days=longest_continuous_days,
+            continuous_days=continuous_days,
         )
     else:
         print("Error")
@@ -343,3 +485,9 @@ def edit_profile(user_id):
             db.session.commit()
             print("getting commited")
             return redirect(url_for("view_profile", user_id=user_id))
+
+
+@app.route("/Wave/<user_id>/mhr")
+def mhr(user_id):
+    user = User.query.filter_by(user_id=user_id).first()
+    return render_template("mhr.html", user=user)
