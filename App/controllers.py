@@ -255,8 +255,8 @@ def overview(user_id):
             .all()
         )
 
-        # for journal in week_journals:
-        #     journal.date = journal.date.strftime("%dth %B, %Y")
+        for journal in week_journals:
+            journal.date = journal.date.strftime("%dth %B, %Y")
 
         return render_template(
             "overview.html",
@@ -324,7 +324,7 @@ def analytics(user_id):
         print("Longest continuous days with journal entries:", longest_continuous_days)
 
         # Count the number of continuous days since today in the journal table
-        continuous_days = 0
+        continuous_days = 0  # if there is some error, this used to be 0
         previous_date = None
 
         for journal in journals:
@@ -367,6 +367,47 @@ def analytics(user_id):
 
         word_counts.reverse()
         last_month_dates.reverse()
+
+        # count of stress and no stress for each emotion
+        emotions_stress_counts = {}
+
+        emotions_count = {}
+        for journal in journals:
+            if journal.emotions in emotions_count:
+                emotions_count[journal.emotions] += 1
+            else:
+                emotions_count[journal.emotions] = 1
+        emotions_unique = sorted(emotions_count, key=emotions_count.get, reverse=True)[
+            :5
+        ]
+
+        for emotion in emotions_unique:
+            stress_counts = {}
+            for journal in journals:
+                stress_level = journal.stress_level
+                if emotion in journal.emotions:
+                    if stress_level in stress_counts:
+                        stress_counts[stress_level] += 1
+                    else:
+                        stress_counts[stress_level] = 1
+            emotions_stress_counts[emotion] = stress_counts
+
+        stress_values = []
+        no_stress_values = []
+
+        for emotion, stress_counts in emotions_stress_counts.items():
+            if "Stress" in stress_counts:
+                stress_values.append(stress_counts["Stress"])
+            else:
+                stress_values.append(0 if emotion not in emotions_unique else 0.05)
+
+            if "No Stress" in stress_counts:
+                no_stress_values.append(stress_counts["No Stress"])
+            else:
+                no_stress_values.append(0 if emotion not in emotions_unique else 0.05)
+
+        print(stress_values, no_stress_values)
+        print(emotions_stress_counts)
 
         # Last 12 months emotions count
         last_12_months_emotions = []
@@ -431,7 +472,7 @@ def analytics(user_id):
         max_occurred_emotions.reverse()
         emotion_counts.reverse()
         last_12_months_emotions.reverse()
-        print(last_12_months_emotions, max_occurred_emotions, emotion_counts)
+        # print(last_12_months_emotions, max_occurred_emotions, emotion_counts)
 
         return render_template(
             "analytics.html",
@@ -450,6 +491,9 @@ def analytics(user_id):
             total_entries=total_entries,
             longest_continuous_days=longest_continuous_days,
             continuous_days=continuous_days,
+            emotions_unique=emotions_unique,
+            stress_values=stress_values,
+            no_stress_values=no_stress_values,
         )
     else:
         print("Error")

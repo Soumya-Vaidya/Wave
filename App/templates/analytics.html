@@ -54,17 +54,17 @@
           class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
           <div class="logo mt-3"><img src="/static/assets/img/wavelogo.png" alt="" width="200px"></div>
         </a>
-        <hr class="sidebar-divider my-5">
-        <ul class="navbar-nav text-light" id="accordionSidebar">
-          <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/home"><i
-                class="fas fa-pen"></i><span>Today</span></a>
+        <hr class="sidebar-divider my-4">
+        <ul class="navbar-nav" id="accordionSidebar">
+          <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/home"><i class="fas fa-pen"></i><span
+                style="font-size: 15.5px;">Today</span></a>
           </li>
           <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/overview"><i
-                class="fas fa-calendar-week"></i><span>Overview</span></a></li>
+                class="fas fa-calendar-week"></i><span style="font-size: 15.5px;">Overview</span></a></li>
           <li class="nav-item"><a class="nav-link active" href="/Wave/{{user.user_id}}/analytics"><i
-                class="fas fa-tachometer-alt"></i><span>Analytics</span></a></li>
-          <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/mhr"><i
-                class="fas fa-heart"></i><span>Mental Health
+                class="fas fa-tachometer-alt"></i><span style="font-size: 15.5px;">Analytics</span></a></li>
+          <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/mhr"><i class="fas fa-heart"></i><span
+                style="font-size: 15.5px;">Mental Health
                 Resources</span></a></li>
         </ul>
       </div>
@@ -133,6 +133,8 @@
           <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Cards</h1>
           </div> -->
+
+          <!-- Top Cards -->
 
           <div class="row">
 
@@ -225,7 +227,7 @@
 
         </div>
         <div class="container-fluid">
-          <div class="row mb-5">
+          <div class="row">
             <!-- Pie Chart -->
             <div class="col-lg-4 col-xl-6 m-0">
               <div class="card shadow mb-4">
@@ -401,7 +403,7 @@
           </div>
 
           <!-- Word Count Line Chart -->
-          <div class="row m-5">
+          <div class="row ">
             <div class="col-12">
               <!-- Word Count Line Chart -->
               <div class="card shadow mb-4">
@@ -456,11 +458,176 @@
           </div>
 
 
-          <div class="row m-5">
+          <div class="row ">
+            <!-- Stress Emotion Bar Chart -->
+            <div class="col-6">
+              <div class="card shadow mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <h6 class="text-primary fw-bold m-0">Stress vs Emotion Analysis</h6>
+                  <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle"
+                      aria-expanded="false" data-bs-toggle="dropdown" type="button"><i
+                        class="fas fa-ellipsis-v text-gray-400"></i></button>
+                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                      <p class="text-center dropdown-header">Filters</p><a class="dropdown-item" href="#">&nbsp;Last
+                        Month</a><a class="dropdown-item" href="#">&nbsp;Last Year</a>
+                      <a class="dropdown-item" href="#">&nbsp;Last 6 months</a>
+                      <!-- <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else
+                          here</a> -->
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-body" style="height: 270px;">
+                  <div class="chart-area">
+                    <canvas id="doubleBarChart" style="max-height: 400px;"></canvas>
+                    <script>
+                      document.addEventListener("DOMContentLoaded", () => {
+                        new Chart(document.querySelector('#doubleBarChart'), {
+                          type: 'bar',
+                          data: {
+                            labels: {{ emotions_unique | tojson }},
+                        datasets: [{
+                          label: 'Stress',
+                          data: {{ stress_values | tojson }},
+                        backgroundColor: '#FF6961',
+                        borderColor: '#FF6961',
+                        borderWidth: 1
+                            },
+                        {
+                          label: 'Non-Stress',
+                          data: {{ no_stress_values | tojson }},
+                        backgroundColor: '#77DD77',
+                        borderColor: '#77DD77',
+                        borderWidth: 1
+                        }]
+                          },
+                        options: {
+                        responsive: true,
+                        plugins: {
+                          legend: {
+                            position: 'top',
+                          },
+                          title: {
+                            display: true,
+                            text: 'Emotions during Stress vs. Non-Stress'
+                          }
+                        },
+                        scales: {
+                          x: {
+                            stacked: true,
+                            title: {
+                              display: true,
+                              text: 'Emotions'
+                            }
+                          },
+                          y: {
+                            stacked: true,
+                            title: {
+                              display: true,
+                              text: 'Frequency'
+                            }
+                          }
+                        }
+                      }
+                        });
+                      });
+                    </script>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Monthly Emotions Bar Chart -->
+            <div class="col-6">
+              <div class="card shadow mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <h6 class="text-primary fw-bold m-0">Monthly Emotions</h6>
+                  <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle"
+                      aria-expanded="false" data-bs-toggle="dropdown" type="button"><i
+                        class="fas fa-ellipsis-v text-gray-400"></i></button>
+                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                      <p class="text-center dropdown-header">Filters</p><a class="dropdown-item" href="#">&nbsp;Last
+                        Month</a><a class="dropdown-item" href="#">&nbsp;Last Year</a>
+                      <a class="dropdown-item" href="#">&nbsp;Last 6 months</a>
+                      <!-- <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else
+                          here</a> -->
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bar Chart -->
+                <div class="card-body" style="height: 270px;">
+                  <div class="chart-area">
+
+                    <canvas id="barChart" style="max-height: 400px;"></canvas>
+                    <script>
+                      document.addEventListener("DOMContentLoaded", () => {
+                        new Chart(document.querySelector('#barChart'), {
+                          type: 'bar',
+                          data: {
+                            labels: [
+                              {% for month in last_12_months_emotions %}
+                                "{{ month }}",
+                              {% endfor %}
+                           ],
+                        datasets: [{
+                          label: 'Monthly Emotions',
+                          data: [
+                            {% for count in emotion_counts %}
+                                  {{ count }},
+                        {% endfor %}
+                      ],
+                        backgroundColor: [
+                        {% for emotion in max_occurred_emotions %}
+                      '{{ emotions[emotion] }}',
+                        {% endfor %}
+                            ],
+                      borderWidth: 1
+                          }]
+                        },
+                      options: {
+                        scales: {
+                          y: {
+                            beginAtZero: true
+                          }
+                        },
+                        tooltips: {
+                          callbacks: {
+                            label: function(tooltipItem, data) {
+                              var dataset = data.datasets[tooltipItem.datasetIndex];
+                              var label = dataset.label || '';
+                              var value = data.max_occurred_emotions[tooltipItem.index]; // Assuming max_occurred_emotions is passed in data
+                              var color = dataset.backgroundColor[tooltipItem.index];
+
+                              label += ': ' + value; // Append the emotion to the label
+
+                              return {
+                                label: label,
+                                backgroundColor: color
+                              };
+                            }
+                          }
+                        }
+
+                      }
+                      });
+                    });
+                    </script>
+                    <!-- End Bar CHart -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+            </div>
+
             <!-- Bubble -->
             <div class="col-6">
               <!-- Bubble Chart -->
-              <canvas id="bubbleChart" style="max-height: 400px;"></canvas>
+              <!-- <canvas id="bubbleChart" style="max-height: 400px;"></canvas>
               <script>
                 document.addEventListener("DOMContentLoaded", () => {
                   new Chart(document.querySelector('#bubbleChart'), {
@@ -535,100 +702,10 @@
                     }
                   });
                 });
-              </script>
+              </script> -->
               <!-- End Bubble Chart -->
             </div>
 
-            <!-- Monthly Emotions Bar Chart -->
-            <div class="col-6">
-              <div class="card shadow mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                  <h6 class="text-primary fw-bold m-0">Monthly Emotions</h6>
-                  <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle"
-                      aria-expanded="false" data-bs-toggle="dropdown" type="button"><i
-                        class="fas fa-ellipsis-v text-gray-400"></i></button>
-                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
-                      <p class="text-center dropdown-header">Filters</p><a class="dropdown-item" href="#">&nbsp;Last
-                        Month</a><a class="dropdown-item" href="#">&nbsp;Last Year</a>
-                      <a class="dropdown-item" href="#">&nbsp;Last 6 months</a>
-                      <!-- <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else
-                          here</a> -->
-                    </div>
-                  </div>
-                </div>
-                <!-- Bar Chart -->
-                <div class="card-body" style="height: 250px;">
-                  <div class="chart-area">
-
-                    <canvas id="barChart" style="max-height: 400px;"></canvas>
-                    <script>
-                      document.addEventListener("DOMContentLoaded", () => {
-                        new Chart(document.querySelector('#barChart'), {
-                          type: 'bar',
-                          data: {
-                            labels: [
-                              {% for month in last_12_months_emotions %}
-                                "{{ month }}",
-                              {% endfor %}
-                           ],
-                        datasets: [{
-                          label: 'Monthly Emotions',
-                          data: [
-                            {% for count in emotion_counts %}
-                                  {{ count }},
-                        {% endfor %}
-                      ],
-                        backgroundColor: [
-                        {% for emotion in max_occurred_emotions %}
-                      '{{ emotions[emotion] }}',
-                        {% endfor %}
-                            ],
-                      borderWidth: 1
-                          }]
-                        },
-                      options: {
-                        scales: {
-                          y: {
-                            beginAtZero: true
-                          }
-                        },
-                        tooltips: {
-                          callbacks: {
-                            label: function(tooltipItem, data) {
-                              var dataset = data.datasets[tooltipItem.datasetIndex];
-                              var label = dataset.label || '';
-                              var value = data.max_occurred_emotions[tooltipItem.index]; // Assuming max_occurred_emotions is passed in data
-                              var color = dataset.backgroundColor[tooltipItem.index];
-
-                              label += ': ' + value; // Append the emotion to the label
-
-                              return {
-                                label: label,
-                                backgroundColor: color
-                              };
-                            }
-                          }
-                        }
-
-                      }
-                      });
-                    });
-                    </script>
-                    <!-- End Bar CHart -->
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row m-5">
-            <div class="col-4">
-
-            </div>
-            <div class="col-4">
-            </div>
-            <div class="col-4">
-            </div>
           </div>
 
 
@@ -637,7 +714,7 @@
               <div class="text-center my-auto copyright"><span>Copyright © Wave 2024</span></div>
             </div>
           </footer>
-        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+        </div> <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
       </div>
       <script src="/static/assets/bootstrap/js/bootstrap.min.js"></script>
       <script src="/static/assets/js/chart.min.js"></script>
@@ -647,6 +724,7 @@
       <script src="/static/calender/js/popper.js"></script>
       <script src="/static/calender/js/bootstrap.min.js"></script>
       <script src="/static/calender/js/main.js"></script>
+    </div>
 </body>
 
 </html>
