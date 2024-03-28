@@ -255,8 +255,8 @@ def overview(user_id):
             .all()
         )
 
-        for journal in week_journals:
-            journal.date = journal.date.strftime("%dth %B, %Y")
+        # for journal in week_journals:
+        #     journal.date = journal.date.strftime("%dth %B, %Y")
 
         return render_template(
             "overview.html",
@@ -427,6 +427,10 @@ def analytics(user_id):
             last_12_months_emotions.append(month_start.strftime("%B, %Y"))
             max_occurred_emotions.append(max_emotion)
             emotion_counts.append(max_count)
+
+        max_occurred_emotions.reverse()
+        emotion_counts.reverse()
+        last_12_months_emotions.reverse()
         print(last_12_months_emotions, max_occurred_emotions, emotion_counts)
 
         return render_template(

@@ -209,7 +209,8 @@
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                         Longest Streak</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{longest_continuous_days}} Day Streak!!</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{longest_continuous_days}}
+                        Day Streak!!</div>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
@@ -296,6 +297,20 @@
                             legend: {
                               position: 'left',
                               align: 'center'
+                            },
+                            tooltips: {
+                              callbacks: {
+                                label: function (tooltipItem, data) {
+                                  var dataset = data.datasets[tooltipItem.datasetIndex];
+                                  var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                                    return previousValue + currentValue;
+                                  });
+                                  var currentValue = dataset.data[tooltipItem.index];
+                                  var emotionLabel = labels[tooltipItem.index];
+                                  var percentage = Math.round((currentValue / total) * 100);
+                                  return emotionLabel + ': ' + percentage + "%";
+                                }
+                              }
                             }
                           }
                         });
@@ -352,6 +367,21 @@
                             legend: {
                               position: 'left',
                               align: 'center'
+                            },
+                            tooltips: {
+                              callbacks: {
+                                label: function (tooltipItem, data) {
+                                  var dataset = data.datasets[tooltipItem.datasetIndex];
+                                  var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                                    return previousValue + currentValue;
+                                  });
+                                  var currentValue = dataset.data[tooltipItem.index];
+                                  var count = currentValue;
+                                  var percentage = Math.round((currentValue / total) * 100);
+                                  var label = data.labels[tooltipItem.index];
+                                  return label + ': ' + count + ' (' + percentage + "%)";
+                                }
+                              }
                             }
                           }
                         });
@@ -370,6 +400,7 @@
             <!-- Stress Pie Chart End -->
           </div>
 
+          <!-- Word Count Line Chart -->
           <div class="row m-5">
             <div class="col-12">
               <!-- Word Count Line Chart -->
@@ -422,164 +453,200 @@
               </div>
               <!-- Word Count Line Chart End -->
             </div>
+          </div>
 
-            <div class="row m-5">
-              <div class="col-4">
 
-              </div>
-              <div class="col-4">
-              </div>
-              <div class="col-4">
-              </div>
-            </div>
-
-            <div class="row m-5">
-              <div class="col-6">
-                <!-- Bubble Chart -->
-                <canvas id="bubbleChart" style="max-height: 400px;"></canvas>
-                <script>
-                  document.addEventListener("DOMContentLoaded", () => {
-                    new Chart(document.querySelector('#bubbleChart'), {
-                      type: 'bubble',
-                      data: {
-                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                        datasets: [{
-                          label: 'Dataset 1',
-                          data: [{
-                            x: 20,
-                            y: 30,
-                            r: 15
-                          },
-                          {
-                            x: 40,
-                            y: 10,
-                            r: 10
-                          },
-                          {
-                            x: 15,
-                            y: 37,
-                            r: 12
-                          },
-                          {
-                            x: 32,
-                            y: 42,
-                            r: 33
-                          }
-                          ],
-                          borderColor: 'rgb(255, 99, 132)',
-                          backgroundColor: 'rgba(255, 99, 132, 0.5)'
+          <div class="row m-5">
+            <!-- Bubble -->
+            <div class="col-6">
+              <!-- Bubble Chart -->
+              <canvas id="bubbleChart" style="max-height: 400px;"></canvas>
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new Chart(document.querySelector('#bubbleChart'), {
+                    type: 'bubble',
+                    data: {
+                      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                      datasets: [{
+                        label: 'Dataset 1',
+                        data: [{
+                          x: 20,
+                          y: 30,
+                          r: 15
                         },
                         {
-                          label: 'Dataset 2',
-                          data: [{
-                            x: 40,
-                            y: 25,
-                            r: 22
-                          },
-                          {
-                            x: 24,
-                            y: 47,
-                            r: 11
-                          },
-                          {
-                            x: 65,
-                            y: 11,
-                            r: 14
-                          },
-                          {
-                            x: 11,
-                            y: 55,
-                            r: 8
-                          }
-                          ],
-                          borderColor: 'rgb(75, 192, 192)',
-                          backgroundColor: 'rgba(75, 192, 192, 0.5)'
+                          x: 40,
+                          y: 10,
+                          r: 10
+                        },
+                        {
+                          x: 15,
+                          y: 37,
+                          r: 12
+                        },
+                        {
+                          x: 32,
+                          y: 42,
+                          r: 33
                         }
-                        ]
+                        ],
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)'
                       },
-                      options: {
-                        responsive: true,
-                        plugins: {
-                          legend: {
-                            position: 'top',
-                          },
-                          title: {
-                            display: true,
-                            text: 'Chart.js Bubble Chart'
-                          }
+                      {
+                        label: 'Dataset 2',
+                        data: [{
+                          x: 40,
+                          y: 25,
+                          r: 22
+                        },
+                        {
+                          x: 24,
+                          y: 47,
+                          r: 11
+                        },
+                        {
+                          x: 65,
+                          y: 11,
+                          r: 14
+                        },
+                        {
+                          x: 11,
+                          y: 55,
+                          r: 8
+                        }
+                        ],
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)'
+                      }
+                      ]
+                    },
+                    options: {
+                      responsive: true,
+                      plugins: {
+                        legend: {
+                          position: 'top',
+                        },
+                        title: {
+                          display: true,
+                          text: 'Chart.js Bubble Chart'
                         }
                       }
-                    });
+                    }
                   });
-                </script>
-                <!-- End Bubble Chart -->
-              </div>
+                });
+              </script>
+              <!-- End Bubble Chart -->
+            </div>
 
-              <div class="col-6">
+            <!-- Monthly Emotions Bar Chart -->
+            <div class="col-6">
+              <div class="card shadow mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <h6 class="text-primary fw-bold m-0">Monthly Emotions</h6>
+                  <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle"
+                      aria-expanded="false" data-bs-toggle="dropdown" type="button"><i
+                        class="fas fa-ellipsis-v text-gray-400"></i></button>
+                    <div class="dropdown-menu shadow dropdown-menu-end animated--fade-in">
+                      <p class="text-center dropdown-header">Filters</p><a class="dropdown-item" href="#">&nbsp;Last
+                        Month</a><a class="dropdown-item" href="#">&nbsp;Last Year</a>
+                      <a class="dropdown-item" href="#">&nbsp;Last 6 months</a>
+                      <!-- <div class="dropdown-divider"></div><a class="dropdown-item" href="#">&nbsp;Something else
+                          here</a> -->
+                    </div>
+                  </div>
+                </div>
                 <!-- Bar Chart -->
-                <canvas id="barChart" style="max-height: 400px;"></canvas>
-                <script>
-                  document.addEventListener("DOMContentLoaded", () => {
-                    new Chart(document.querySelector('#barChart'), {
-                      type: 'bar',
-                      data: {
-                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                <div class="card-body" style="height: 250px;">
+                  <div class="chart-area">
+
+                    <canvas id="barChart" style="max-height: 400px;"></canvas>
+                    <script>
+                      document.addEventListener("DOMContentLoaded", () => {
+                        new Chart(document.querySelector('#barChart'), {
+                          type: 'bar',
+                          data: {
+                            labels: [
+                              {% for month in last_12_months_emotions %}
+                                "{{ month }}",
+                              {% endfor %}
+                           ],
                         datasets: [{
-                          label: 'Bar Chart',
-                          data: [12, 19, 3, 5, 2, 3, 7],
-                          backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(255, 159, 64, 0.2)',
-                            'rgba(255, 205, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(201, 203, 207, 0.2)'
-                          ],
-                          borderColor: [
-                            'rgb(255, 99, 132)',
-                            'rgb(255, 159, 64)',
-                            'rgb(255, 205, 86)',
-                            'rgb(75, 192, 192)',
-                            'rgb(54, 162, 235)',
-                            'rgb(153, 102, 255)',
-                            'rgb(201, 203, 207)'
-                          ],
-                          borderWidth: 1
-                        }]
-                      },
+                          label: 'Monthly Emotions',
+                          data: [
+                            {% for count in emotion_counts %}
+                                  {{ count }},
+                        {% endfor %}
+                      ],
+                        backgroundColor: [
+                        {% for emotion in max_occurred_emotions %}
+                      '{{ emotions[emotion] }}',
+                        {% endfor %}
+                            ],
+                      borderWidth: 1
+                          }]
+                        },
                       options: {
                         scales: {
                           y: {
                             beginAtZero: true
                           }
+                        },
+                        tooltips: {
+                          callbacks: {
+                            label: function(tooltipItem, data) {
+                              var dataset = data.datasets[tooltipItem.datasetIndex];
+                              var label = dataset.label || '';
+                              var value = data.max_occurred_emotions[tooltipItem.index]; // Assuming max_occurred_emotions is passed in data
+                              var color = dataset.backgroundColor[tooltipItem.index];
+
+                              label += ': ' + value; // Append the emotion to the label
+
+                              return {
+                                label: label,
+                                backgroundColor: color
+                              };
+                            }
+                          }
                         }
+
                       }
+                      });
                     });
-                  });
-                </script>
-                <!-- End Bar CHart -->
+                    </script>
+                    <!-- End Bar CHart -->
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-        </div>
+          <div class="row m-5">
+            <div class="col-4">
 
-        <footer class="bg-white sticky-footer">
-          <div class="container my-auto">
-            <div class="text-center my-auto copyright"><span>Copyright © Wave 2024</span></div>
+            </div>
+            <div class="col-4">
+            </div>
+            <div class="col-4">
+            </div>
           </div>
-        </footer>
-      </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
-    </div>
-    <script src="/static/assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/static/assets/js/chart.min.js"></script>
-    <script src="assets/js/bs-init.js"></script>
-    <script src="/static/assets/js/theme.js"></script>
-    <script src="/static/calender/js/jquery.min.js"></script>
-    <script src="/static/calender/js/popper.js"></script>
-    <script src="/static/calender/js/bootstrap.min.js"></script>
-    <script src="/static/calender/js/main.js"></script>
+
+
+          <footer class="bg-white sticky-footer">
+            <div class="container my-auto">
+              <div class="text-center my-auto copyright"><span>Copyright © Wave 2024</span></div>
+            </div>
+          </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+      </div>
+      <script src="/static/assets/bootstrap/js/bootstrap.min.js"></script>
+      <script src="/static/assets/js/chart.min.js"></script>
+      <script src="assets/js/bs-init.js"></script>
+      <script src="/static/assets/js/theme.js"></script>
+      <script src="/static/calender/js/jquery.min.js"></script>
+      <script src="/static/calender/js/popper.js"></script>
+      <script src="/static/calender/js/bootstrap.min.js"></script>
+      <script src="/static/calender/js/main.js"></script>
 </body>
 
 </html>
