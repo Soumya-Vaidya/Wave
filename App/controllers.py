@@ -6,8 +6,6 @@ from transformers import pipeline
 import bcrypt
 from flask import redirect, render_template, request, url_for, json, jsonify
 
-from datetime import datetime, timedelta
-
 import pytz
 
 IST = pytz.timezone("Asia/Kolkata")
@@ -15,6 +13,9 @@ IST = pytz.timezone("Asia/Kolkata")
 from app import app
 from models import Journal, User, Emotions, db
 from dateutil.relativedelta import relativedelta
+from datetime import datetime, timedelta
+from datetime import date
+
 
 salt = bcrypt.gensalt()
 
@@ -105,7 +106,23 @@ def register():
 
 def streak(user_id):
     journals = Journal.query.filter_by(user_id=user_id).all()
-    continuous_days = 0  # if there is some error, this used to be 0
+    continuous_days = 0
+    previous_date = None
+
+    # journals.sort(key=lambda x: x.date).reverse()
+
+    journals.sort(key=lambda x: x.date, reverse=True)
+
+    today = datetime.now(IST).date()
+    today_journal = Journal.query.filter_by(user_id=user_id, date=today).first()
+
+    yesterday = today - timedelta(days=1)
+    yesterday_journal = Journal.query.filter_by(user_id=user_id, date=yesterday).first()
+
+    if today_journal is None and yesterday_journal is None:
+        return 0
+
+    continuous_days = 0
     previous_date = None
 
     for journal in journals:
@@ -116,6 +133,7 @@ def streak(user_id):
         else:
             break
         previous_date = journal.date
+
     return continuous_days
 
 
