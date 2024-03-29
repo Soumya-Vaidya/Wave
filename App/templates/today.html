@@ -49,9 +49,25 @@
                     <div class="container-fluid">
                         <ul class="navbar-nav flex-nowrap ms-auto">
                             <li class="nav-item dropdown no-arrow mx-1">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link"
-                                        aria-expanded="false" data-bs-toggle="dropdown" href="#"><span
-                                            class="badge bg-danger badge-counter">2+</span><i
+                                <div class="nav-item dropdown no-arrow">
+                                    <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown"
+                                        href="#">
+                                        <span class="badge bg-danger badge-counter"></span>
+                                        {% if continuous_days == 0 %}
+                                        <i class="fas fa-fire streak-symbol"> No streak yet!</i>
+                                        {% elif continuous_days == 1 %}
+                                        <i class="fas fa-fire streak-symbol" style="color: orange;"> 1 day streak</i>
+                                        {% else %}
+                                        <i class="fas fa-fire streak-symbol" style="color: orange;"> {{continuous_days}}
+                                            days streak!</i>
+                                        {% endif %}
+                                    </a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <div class="nav-item dropdown no-arrow">
+                                    <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown"
+                                        href="#"><span class="badge bg-danger badge-counter">2+</span><i
                                             class="fas fa-bell fa-fw"></i></a>
                                     <div class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
                                         <h6 class="dropdown-header">alerts center</h6>

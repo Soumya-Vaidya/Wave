@@ -103,6 +103,22 @@ def register():
         return redirect("/")
 
 
+def streak(user_id):
+    journals = Journal.query.filter_by(user_id=user_id).all()
+    continuous_days = 0  # if there is some error, this used to be 0
+    previous_date = None
+
+    for journal in journals:
+        if previous_date is None:
+            continuous_days += 1
+        elif journal.date == previous_date - timedelta(days=1):
+            continuous_days += 1
+        else:
+            break
+        previous_date = journal.date
+    return continuous_days
+
+
 @app.route("/Wave/<user_id>/home", methods=["GET", "POST"])
 def home(user_id):
     if request.method == "GET":
@@ -115,14 +131,14 @@ def home(user_id):
             emotions = Emotions.query.filter_by(jid=today_journal.jid).all()
             label = json.dumps([emotion.emotion_name for emotion in emotions])
             data = json.dumps([emotion.value for emotion in emotions])
-            # print(label)
-            # print(data)
+
         else:
             journals = ""
             emotions = ""
             label = ""
             data = ""
-        # print(emotions)
+
+        continuous_days = streak(user_id)
 
         return render_template(
             "today.html",
@@ -133,6 +149,7 @@ def home(user_id):
             emotions=emotions,
             label=label,
             data=data,
+            continuous_days=continuous_days,
         )
     elif request.method == "POST":
         entry = request.form["entry"]
@@ -237,8 +254,16 @@ def entry(user_id, entry_id):
             label = json.dumps([emotion.emotion_name for emotion in emotions])
             data = json.dumps([emotion.value for emotion in emotions])
 
+        continuous_days = streak(user_id)
+        print(continuous_days)
+
         return render_template(
-            "entry.html", today_journal=entry, user=user, label=label, data=data
+            "entry.html",
+            today_journal=entry,
+            user=user,
+            label=label,
+            data=data,
+            continuous_days=continuous_days,
         )
 
 
@@ -286,12 +311,15 @@ def overview(user_id):
 
         print(calendar_rows)
 
+        continuous_days = streak(user_id)
+
         return render_template(
             "overview.html",
             user=user,
             journals=journals,
             week_journals=week_journals,
             calendar_rows=calendar_rows,
+            continuous_days=continuous_days,
         )
     else:
         print("Error")
@@ -353,19 +381,19 @@ def analytics(user_id):
         print("Longest continuous days with journal entries:", longest_continuous_days)
 
         # Count the number of continuous days since today in the journal table
-        continuous_days = 0  # if there is some error, this used to be 0
-        previous_date = None
+        # continuous_days = 0  # if there is some error, this used to be 0
+        # previous_date = None
 
-        for journal in journals:
-            if previous_date is None:
-                continuous_days += 1
-            elif journal.date == previous_date - timedelta(days=1):
-                continuous_days += 1
-            else:
-                break
-            previous_date = journal.date
+        # for journal in journals:
+        #     if previous_date is None:
+        #         continuous_days += 1
+        #     elif journal.date == previous_date - timedelta(days=1):
+        #         continuous_days += 1
+        #     else:
+        #         break
+        #     previous_date = journal.date
 
-        print("Number of continuous days since today:", continuous_days)
+        continuous_days = streak(user_id)
 
         # Last month word count Line Chart
         last_month_start = datetime.now(IST).date() - timedelta(days=30)
@@ -532,7 +560,10 @@ def analytics(user_id):
 def view_profile(user_id):
     if request.method == "GET":
         user = User.query.filter_by(user_id=user_id).first()
-        return render_template("profile.html", user=user)
+        continuous_days = streak(user_id)
+        return render_template(
+            "profile.html", user=user, continuous_days=continuous_days
+        )
     else:
         return render_template("404_error.html")
 
@@ -541,7 +572,10 @@ def view_profile(user_id):
 def edit_profile(user_id):
     if request.method == "GET":
         user = User.query.filter_by(user_id=user_id).first()
-        return render_template("profile.html", user=user)
+        continuous_days = streak(user_id)
+        return render_template(
+            "profile.html", user=user, continuous_days=continuous_days
+        )
     elif request.method == "POST":
         name = request.form["name"]
         contact = request.form["contact"]
@@ -567,4 +601,6 @@ def edit_profile(user_id):
 @app.route("/Wave/<user_id>/mhr")
 def mhr(user_id):
     user = User.query.filter_by(user_id=user_id).first()
-    return render_template("mhr.html", user=user)
+    continuous_days = streak(user_id)
+    print(continuous_days)
+    return render_template("mhr.html", user=user, continuous_days=continuous_days)
