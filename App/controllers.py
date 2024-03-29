@@ -255,14 +255,43 @@ def overview(user_id):
             .all()
         )
 
-        for journal in week_journals:
-            journal.date = journal.date.strftime("%dth %B, %Y")
+        # for journal in week_journals:
+        #     journal.date = journal.date.strftime("%dth %B, %Y")
+
+        # Get the first entry date in Journal
+        first_entry = Journal.query.order_by(Journal.date).first()
+        if first_entry:
+            first_date = first_entry.date
+        else:
+            first_date = datetime.now(IST).date()
+
+        # Create a list of all dates from the first entry date to the current date
+        all_dates = [
+            first_date + timedelta(days=i)
+            for i in range((datetime.now(IST).date() - first_date).days + 1)
+        ]
+
+        calendar_rows = []
+        for date in all_dates:
+            date_str = date.strftime("%d")
+            journal = Journal.query.filter_by(user_id=user_id, date=date).first()
+            if journal:
+                journal = Journal.query.filter_by(user_id=user_id, date=date).first()
+            if journal:
+                emotions = journal.emotions
+                row = [(date_str, emotions)]
+            else:
+                row = [(date_str, "None")]
+            calendar_rows.append(row)
+
+        print(calendar_rows)
 
         return render_template(
             "overview.html",
             user=user,
             journals=journals,
             week_journals=week_journals,
+            calendar_rows=calendar_rows,
         )
     else:
         print("Error")
