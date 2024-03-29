@@ -26,9 +26,7 @@
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
             <div class="container-fluid d-flex flex-column p-0"><a
                     class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-                    <div class="logo mt-3">
-                        <img src="/static/assets/img/wavelogo.png" alt="" width="200px">
-                    </div>
+                    <div class="logo mt-3"><img src="/static/assets/img/wave-4.png" alt="" width="220px"></div>
                 </a>
                 <hr class="sidebar-divider my-4">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
@@ -40,8 +38,9 @@
                     <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/analytics"><i
                                 class="fas fa-tachometer-alt"></i><span style="font-size: 15.5px;">Analytics</span></a>
                     </li>
-                    <li class="nav-item"><a class="nav-link active" href="/Wave/mhr"><i class="fas fa-heart"></i><span
-                                style="font-size: 15.5px;">Mental Health Resources</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/Wave/{{user.user_id}}/mhr"><i
+                                class="fas fa-heart"></i><span style="font-size: 15.5px;">Mental Health
+                                Resources</span></a></li>
                 </ul>
             </div>
         </nav>

@@ -119,6 +119,27 @@ def streak(user_id):
     return continuous_days
 
 
+def longest_streak(user_id):
+    journals = Journal.query.filter_by(user_id=user_id).all()
+    longest_continuous_days = 0
+    current_continuous_days = 0
+    previous_date = None
+
+    for journal in journals:
+        current_date = journal.date
+        if previous_date is None or (current_date - previous_date).days == 1:
+            current_continuous_days += 1
+        else:
+            current_continuous_days = 1
+
+        if current_continuous_days > longest_continuous_days:
+            longest_continuous_days = current_continuous_days
+
+        previous_date = current_date
+
+    return longest_continuous_days
+
+
 @app.route("/Wave/<user_id>/home", methods=["GET", "POST"])
 def home(user_id):
     if request.method == "GET":
@@ -362,23 +383,23 @@ def analytics(user_id):
         stress_data = json.dumps([stress_count, no_stress_count])
 
         # Count the longest number of continuous days with journal entries
-        longest_continuous_days = 0
-        current_continuous_days = 0
-        previous_date = None
+        # longest_continuous_days = 0
+        # current_continuous_days = 0
+        # previous_date = None
 
-        for journal in journals:
-            current_date = journal.date
-            if previous_date is None or (current_date - previous_date).days == 1:
-                current_continuous_days += 1
-            else:
-                current_continuous_days = 1
+        # for journal in journals:
+        #     current_date = journal.date
+        #     if previous_date is None or (current_date - previous_date).days == 1:
+        #         current_continuous_days += 1
+        #     else:
+        #         current_continuous_days = 1
 
-            if current_continuous_days > longest_continuous_days:
-                longest_continuous_days = current_continuous_days
+        #     if current_continuous_days > longest_continuous_days:
+        #         longest_continuous_days = current_continuous_days
 
-            previous_date = current_date
+        #     previous_date = current_date
 
-        print("Longest continuous days with journal entries:", longest_continuous_days)
+        longest_continuous_days = longest_streak(user_id)
 
         # Count the number of continuous days since today in the journal table
         # continuous_days = 0  # if there is some error, this used to be 0
