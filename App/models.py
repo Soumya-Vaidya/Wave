@@ -1,10 +1,11 @@
-from datetime import datetime
-
-from sqlalchemy import DateTime, Date, Time
-from sqlalchemy import ForeignKey
+from sqlalchemy import Column, Date, ForeignKey, Integer, String, Unicode
 from sqlalchemy.orm import relationship
+from sqlalchemy_utils import StringEncryptedType
+from sqlalchemy_utils.types.encrypted.encrypted_type import AesEngine
 
 from app import db
+
+secret_key = b"Sixteen byte key"
 
 
 class User(db.Model):
@@ -24,13 +25,13 @@ class User(db.Model):
 
 
 class Journal(db.Model):
-    jid = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, ForeignKey("user.user_id"), nullable=False)
-    date = db.Column(Date, nullable=False)
-    entry = db.Column(db.String(500), nullable=False)
-    emotions = db.Column(db.String(100), nullable=False)
-    stress_level = db.Column(db.String, nullable=False)
-    word_count = db.Column(db.Integer, nullable=False)
+    jid = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("user.user_id"), nullable=False)
+    date = Column(Date, nullable=False)
+    entry = Column(StringEncryptedType(Unicode, secret_key, AesEngine, "pkcs5"))
+    emotions = Column(String(100), nullable=False)
+    stress_level = Column(String, nullable=False)
+    word_count = Column(Integer, nullable=False)
 
     # Add the relationship with User
     user = relationship("User", back_populates="journals")

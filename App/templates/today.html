@@ -131,7 +131,7 @@
                                             </i>&nbsp;Profile
                                         </a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="/">
+                                        <a class="dropdown-item" href="/logout">
                                             <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400">
                                             </i>&nbsp;Logout</a>
                                     </div>
@@ -264,8 +264,12 @@
                             <div class="card shadow mb-4">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <h6 class="text-primary fw-bold m-0">Make an Entry</h6>
+                                  
                                     <form action="/Wave/{{user.user_id}}/home" method="POST">
                                         <div class="d-flex align-items-center">
+                                             <!-- Can be enabled for backfilling  -->
+                                             <label for="manual_date">Entry Date:</label>
+                                            <input type="date" id="manual_date" name="manual_date"> 
                                             <input class="btn btn-primary btn-sm" type="submit" value="Add to Journal">
                                         </div>
                                 </div>
@@ -274,7 +278,7 @@
                                         <div class="lines">
                                             <div class="text" spellcheck="true">
                                                 {{date}} <br /><br />
-                                                <textarea name="entry"
+                                                <textarea name="entry" required
                                                     style="background: transparent; outline: none; border: none; height: 100%;"
                                                     class="w-100">{{today_journal.entry}}</textarea>
                                             </div>
@@ -284,8 +288,9 @@
                                         <div class="holes hole-bottom"></div>
                                     </div>
                                     <div class="word-count">
-                                        Word Count: <span id="wordCount">{{today_journal.word_count}}</span>
+                                        Word Count: <span id="wordCount">{{ today_journal.word_count if today_journal.word_count is defined else 0 }}</span>
                                     </div>
+                                    
                                 </div>
 
                                 </form>

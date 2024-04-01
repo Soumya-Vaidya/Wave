@@ -4,6 +4,10 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__, template_folder="templates")
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.sqlite3"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["JWT_SECRET_KEY"] = "your-secret-key"
+app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+app.config["JWT_COOKIE_SECURE"] = False
+# app.config["JWT_CSRF_IN_COOKIES"] = False
 
 
 db = SQLAlchemy(app)
