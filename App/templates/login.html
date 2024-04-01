@@ -9,10 +9,11 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="/static/assets/fonts/fontawesome-all.min.css">
+    <link rel="icon" href="/static/assets/img/wave_2_new.png" type="image/x-icon">
 </head>
 
 <body class="bg-gradient-primary">
-    
+
     <div class="container">
         <div class="row justify-content-center m-5">
             <div class="col-md-9 col-lg-12 col-xl-10">
@@ -30,11 +31,11 @@
                                     </div>
                                     <form class="user" method="post">
                                         <div class="mb-3"><input class="form-control form-control-user" type="email"
-                                                id="InputEmail" aria-describedby="emailHelp"
-                                                placeholder="Email Address" name="email" required></div>
+                                                id="InputEmail" aria-describedby="emailHelp" placeholder="Email Address"
+                                                name="email" required></div>
                                         <div class="mb-3"><input class="form-control form-control-user" type="password"
-                                                id="InputPassword" placeholder="Password" name="password"
-                                                required></div>
+                                                id="InputPassword" placeholder="Password" name="password" required>
+                                        </div>
                                         <div class="mb-3">
                                             <div class="custom-control custom-checkbox small">
                                                 <div class="form-check"><input
@@ -64,24 +65,24 @@
     <script src="/static/assets/js/theme.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        document.querySelector('.user').addEventListener('submit', function(event) {
+        document.querySelector('.user').addEventListener('submit', function (event) {
             event.preventDefault();
 
             axios.post('/Wave/login', {
                 email: document.getElementById('InputEmail').value,
                 password: document.getElementById('InputPassword').value,
             })
-            .then(response => {
-                if (response.status === 200) {
-                    window.location.href = response.data['redirect_url']; 
-                } else {
+                .then(response => {
+                    if (response.status === 200) {
+                        window.location.href = response.data['redirect_url'];
+                    } else {
+                        alert('Wrong email or password');
+                    }
+                })
+                .catch(error => {
+                    console.log("banana")
                     alert('Wrong email or password');
-                }
-            })
-            .catch(error => {
-                console.log("banana")
-                alert('Wrong email or password');
-            });
+                });
         });
     </script>
 </body>

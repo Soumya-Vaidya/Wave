@@ -45,6 +45,9 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
 
+  <link rel="icon" href="/static/assets/img/wave_2_new.png" type="image/x-icon">
+
+
 </head>
 
 <body id="page-top">
@@ -580,6 +583,7 @@
                   <div class="chart-area">
 
                     <canvas id="barChart" style="max-height: 400px;"></canvas>
+
                     <script>
                       document.addEventListener("DOMContentLoaded", () => {
                         new Chart(document.querySelector('#barChart'), {
@@ -611,8 +615,6 @@
                             beginAtZero: true
                           }
                         },
-
-
                       }
                       });
                     });
