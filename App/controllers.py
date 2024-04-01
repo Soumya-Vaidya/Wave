@@ -253,7 +253,6 @@ def home(user_id):
         # print(emotion_dict)
 
         major_emotion = max(emotion_dict, key=emotion_dict.get)
-        print(major_emotion)
 
         # predict using our ML model
         sentences = re.split(r"(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s", entry)
@@ -287,7 +286,6 @@ def home(user_id):
                 journal.date = date
                 db.session.commit()
                 print("Entry updated")
-                print(major_emotion)
 
                 # update emotions table
                 emotions = Emotions.query.filter_by(jid=journal.jid).all()
@@ -342,8 +340,9 @@ def entry(user_id, entry_id):
         label = json.dumps([emotion.emotion_name for emotion in emotions])
         data = json.dumps([emotion.value for emotion in emotions])
 
+    entry_date = entry.date.strftime("%dth %B, %Y")
+
     continuous_days = streak(user_id)
-    print(continuous_days)
 
     return render_template(
         "entry.html",
@@ -351,6 +350,7 @@ def entry(user_id, entry_id):
         user=user,
         label=label,
         data=data,
+        entry_date=entry_date,
         continuous_days=continuous_days,
     )
 
@@ -368,8 +368,9 @@ def overview(user_id):
         .all()
     )
 
-    # for journal in week_journals:
-    #     journal.date = journal.date.strftime("%dth %B, %Y")
+    weekly_dates = []
+    for journal in week_journals:
+        weekly_dates.append(journal.date.strftime("%dth %B, %Y"))
 
     # Get the first entry date in Journal
     first_entry = Journal.query.order_by(Journal.date).first()
@@ -397,8 +398,6 @@ def overview(user_id):
             row = [(date_str, "None")]
         calendar_rows.append(row)
 
-    print(calendar_rows)
-
     continuous_days = streak(user_id)
 
     return render_template(
@@ -406,7 +405,8 @@ def overview(user_id):
         user=user,
         journals=journals,
         week_journals=week_journals,
-        calendar_rows=calendar_rows,
+        weekly_dates=weekly_dates,
+        # calendar_rows=calendar_rows,
         continuous_days=continuous_days,
     )
 
@@ -545,8 +545,8 @@ def analytics(user_id):
         else:
             no_stress_values.append(0 if emotion not in emotions_unique else 0.05)
 
-    print(stress_values, no_stress_values)
-    print(emotions_stress_counts)
+    # print(stress_values, no_stress_values)
+    # print(emotions_stress_counts)
 
     # Last 12 months emotions count
     last_12_months_emotions = []
@@ -676,7 +676,6 @@ def edit_profile(user_id):
 def mhr(user_id):
     user = User.query.filter_by(user_id=user_id).first()
     continuous_days = streak(user_id)
-    print(continuous_days)
     return render_template("mhr.html", user=user, continuous_days=continuous_days)
 
 

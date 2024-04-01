@@ -26,7 +26,7 @@
                 </a>
                 <hr class="sidebar-divider my-4">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link active" href="/Wave/{{user.user_id}}/home"><i
+                    <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/home"><i
                                 class="fas fa-pen"></i><span style="font-size: 15.5px;">Today</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/Wave/{{user.user_id}}/overview"><i
                                 class="fas fa-calendar-week"></i><span style="font-size: 15.5px;">Overview</span></a>
@@ -76,7 +76,7 @@
                                                         class="fas fa-file-alt text-white"></i></div>
                                             </div>
 
-                                            <div><span class="small text-gray-500">{{date}}</span>
+                                            <div><span class="small text-gray-500">{{entry_date}}</span>
                                                 <p>Hey, you haven't filled up today's journal entry!</p>
                                             </div>
                                         </a>
@@ -87,7 +87,7 @@
                                                         class="fas fa-file-alt text-white"></i></div>
                                             </div>
 
-                                            <div><span class="small text-gray-500">{{date}}</span>
+                                            <div><span class="small text-gray-500">{{entry_date}}</span>
                                                 <p>Daily Streak Intact!</p>
                                             </div>
                                         </a>
@@ -97,7 +97,7 @@
                                                 <div class="bg-success icon-circle"><i
                                                         class="fas fa-donate text-white"></i></div>
                                             </div>
-                                            <div><span class="small text-gray-500">{{date}}</span>
+                                            <div><span class="small text-gray-500">{{entry_date}}</span>
                                                 <p>Reminder: Take a deep breath. </p>
                                             </div>
                                         </a>
@@ -255,7 +255,7 @@
                                     <div class="paper">
                                         <div class="lines">
                                             <div class="text" spellcheck="true">
-                                                {{today_journal.date}} <br /><br />
+                                                {{entry_date}} <br /><br />
                                                 {{today_journal.entry}} </div>
                                         </div>
                                         <div class="holes hole-top"></div>
