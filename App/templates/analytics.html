@@ -611,23 +611,7 @@
                             beginAtZero: true
                           }
                         },
-                        tooltips: {
-                          callbacks: {
-                            label: function(tooltipItem, data) {
-                              var dataset = data.datasets[tooltipItem.datasetIndex];
-                              var label = dataset.label || '';
-                              var value = data.max_occurred_emotions[tooltipItem.index]; // Assuming max_occurred_emotions is passed in data
-                              var color = dataset.backgroundColor[tooltipItem.index];
 
-                              label += ': ' + value; // Append the emotion to the label
-
-                              return {
-                                label: label,
-                                backgroundColor: color
-                              };
-                            }
-                          }
-                        }
 
                       }
                       });

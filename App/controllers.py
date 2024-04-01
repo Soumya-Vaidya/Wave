@@ -141,15 +141,13 @@ def register():
             )
         )
         db.session.commit()
-        return redirect("/")
+        return redirect("/Wave/login")
 
 
 def streak(user_id):
     journals = Journal.query.filter_by(user_id=user_id).all()
     continuous_days = 0
     previous_date = None
-
-    # journals.sort(key=lambda x: x.date).reverse()
 
     journals.sort(key=lambda x: x.date, reverse=True)
 
@@ -178,24 +176,23 @@ def streak(user_id):
 
 
 def longest_streak(user_id):
-    journals = Journal.query.filter_by(user_id=user_id).all()
-    longest_continuous_days = 0
-    current_continuous_days = 0
+    journals = (
+        Journal.query.filter_by(user_id=user_id).order_by(Journal.date.desc()).all()
+    )
+    max_streak = 0
+    current_streak = 0
     previous_date = None
 
     for journal in journals:
-        current_date = journal.date
-        if previous_date is None or (current_date - previous_date).days == 1:
-            current_continuous_days += 1
+        if previous_date is None or journal.date == previous_date - timedelta(days=1):
+            current_streak += 1
         else:
-            current_continuous_days = 1
+            max_streak = max(max_streak, current_streak)
+            current_streak = 1
+        previous_date = journal.date
 
-        if current_continuous_days > longest_continuous_days:
-            longest_continuous_days = current_continuous_days
-
-        previous_date = current_date
-
-    return longest_continuous_days
+    max_streak = max(max_streak, current_streak)
+    return max_streak
 
 
 @app.route("/Wave/<user_id>/home", methods=["GET", "POST"])
