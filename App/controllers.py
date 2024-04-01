@@ -212,8 +212,8 @@ def home(user_id):
     #     return redirect(url_for("landing"))
     # check_jwt_cookie(request)
 
-    # if not verify_user(user_id):
-    #     return redirect(url_for("landing"))
+    if not verify_user(user_id):
+        return redirect(url_for("landing"))
 
     if request.method == "GET":
         user = User.query.filter_by(user_id=user_id).first()
@@ -662,8 +662,8 @@ def view_profile(user_id):
 @app.route("/Wave/<user_id>/profile/edit", methods=["GET", "POST"])
 @jwt_required()
 def edit_profile(user_id):
-    # if not verify_user(user_id):
-    #     return redirect(url_for("landing"))
+    if not verify_user(user_id):
+        return redirect(url_for("landing"))
     if request.method == "GET":
         user = User.query.filter_by(user_id=user_id).first()
         continuous_days = streak(user_id)
