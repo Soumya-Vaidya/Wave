@@ -14,6 +14,7 @@ from flask_jwt_extended import (
     set_access_cookies,
     set_refresh_cookies,
     unset_jwt_cookies,
+    get_jwt_identity,
 )
 from models import Emotions, Journal, User, db
 
@@ -68,6 +69,13 @@ with open("dl_model.pkl", "rb") as file:
 
 #     # Tokens are present and valid, continue with the request
 #     return None
+
+
+def verify_user(user_id):
+    curr_user = get_jwt_identity()
+    if int(curr_user) != int(user_id):
+        return False
+    return True
 
 
 @app.route("/")
@@ -196,13 +204,17 @@ def longest_streak(user_id):
 
 
 @app.route("/Wave/<user_id>/home", methods=["GET", "POST"])
-# @jwt_required()
+@jwt_required()
 def home(user_id):
     # try:
     #     verify_jwt_in_request()
     # except:
     #     return redirect(url_for("landing"))
     # check_jwt_cookie(request)
+
+    # if not verify_user(user_id):
+    #     return redirect(url_for("landing"))
+
     if request.method == "GET":
         user = User.query.filter_by(user_id=user_id).first()
         date_format = datetime.now(IST).strftime("%dth %B, %Y")
@@ -232,14 +244,15 @@ def home(user_id):
             label=label,
             data=data,
             continuous_days=continuous_days,
+            # csrf_token=(get_raw_jwt() or {}).get("csrf"),
         )
     elif request.method == "POST":
         manual_date = request.form.get("manual_date")
         entry = request.form["entry"]
         words = entry.split()
         word_count = len(words)
-        print(entry)
-        print(word_count)
+        # print(entry)
+        # print(word_count)
         emotions = model.predict(entry)[0]
 
         # filters acc to threshold from DL model
@@ -358,6 +371,8 @@ def entry(user_id, entry_id):
 @app.route("/Wave/<user_id>/overview")
 @jwt_required()
 def overview(user_id):
+    if not verify_user(user_id):
+        return redirect(url_for("landing"))
     user = User.query.filter_by(user_id=user_id).first()
     journals = Journal.query.filter_by(user_id=user_id).all()
 
@@ -414,6 +429,8 @@ def overview(user_id):
 @app.route("/Wave/<user_id>/analytics")
 @jwt_required()
 def analytics(user_id):
+    if not verify_user(user_id):
+        return redirect(url_for("landing"))
     user = User.query.filter_by(user_id=user_id).first()
 
     # Emotions Pie Chart
@@ -635,14 +652,18 @@ def analytics(user_id):
 @app.route("/Wave/<user_id>/profile")
 @jwt_required()
 def view_profile(user_id):
+    if not verify_user(user_id):
+        return redirect(url_for("landing"))
     user = User.query.filter_by(user_id=user_id).first()
     continuous_days = streak(user_id)
     return render_template("profile.html", user=user, continuous_days=continuous_days)
 
 
 @app.route("/Wave/<user_id>/profile/edit", methods=["GET", "POST"])
-# @jwt_required()
+@jwt_required()
 def edit_profile(user_id):
+    # if not verify_user(user_id):
+    #     return redirect(url_for("landing"))
     if request.method == "GET":
         user = User.query.filter_by(user_id=user_id).first()
         continuous_days = streak(user_id)
@@ -674,6 +695,8 @@ def edit_profile(user_id):
 @app.route("/Wave/<user_id>/mhr")
 @jwt_required()
 def mhr(user_id):
+    if not verify_user(user_id):
+        return redirect(url_for("landing"))
     user = User.query.filter_by(user_id=user_id).first()
     continuous_days = streak(user_id)
     return render_template("mhr.html", user=user, continuous_days=continuous_days)
