@@ -380,6 +380,7 @@ def overview(user_id):
     week_journals = (
         Journal.query.filter_by(user_id=user_id)
         .filter(Journal.date >= week_start)
+        .order_by(Journal.date)
         .all()
     )
 
