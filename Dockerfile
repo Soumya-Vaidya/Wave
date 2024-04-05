@@ -1,6 +1,6 @@
 FROM python:3
 
-WORKDIR /Wave
+WORKDIR /Wave/App
 
 COPY App/requirements.txt .
 
