@@ -1,4 +1,4 @@
-# Wave: NLP powered Smart Journaling App
+# 🌊 Wave: NLP powered Smart Journaling App 
 
 Wave provides users with the ability to journal daily entries while offering emotion prediction and analysis. With over 25 emotions and stress detection capabilities, users can gain valuable insights into their emotional well-being over time. The application also includes various data visualizations such as correlation of stress with emotions, emotions over a period of time, and more.
 
@@ -32,10 +32,10 @@ Now, you're ready to start using Wave!
 
 ## Features
 
-- **Customizable Profile:** Users can customize their profiles to personalize their journaling experience.
 - **Daily Journal Entry:** Users can enter daily journal entries, which are editable only during that day, and receive live analysis of emotions and stress.
 - **Color-Coded Entries:** Previous journal entries are displayed with color-coding according to the dominant emotion.
 - **Detailed Analytics:** The application provides a detailed analytics page offering breakdowns of emotions and stress levels over time through pie charts, histograms, line charts, etc.
+- **Customizable Profile:** Users can customize their profiles to personalize their journaling experience.
 - **Data Encryption:** All data is encrypted with AES to ensure that no data is readable to anyone except the user.
 - **Secure Endpoints:** Endpoints are secured using JWT authentication with the use of cookies.
 - **Password Security:** User passwords are hashed using bcrypt for enhanced security.
