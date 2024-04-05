@@ -2,7 +2,7 @@ FROM python:3
 
 WORKDIR /Wave/App
 
-COPY requirements.txt .
+COPY /App/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
