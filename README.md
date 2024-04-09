@@ -7,26 +7,34 @@ Wave provides users with the ability to journal daily entries while offering emo
 
 To run the project, follow these steps:
 
+
 1. Clone the repository 
 
 ```
 git clone https://github.com/Soumya-Vaidya/Wave.git
 ```
 2. Open the project folder.
-3. Navigate to the `App` directory.
+
+3. Generate the Pickle files for Emotion Detection
+
+    a. Run `model_dl.ipynb` inside Journal Datasets/GeoEmotions folder
+
+    b. Run `model.ipynb` inside stress_detection folder
+
+4. Navigate to the `App` directory.
 
 ```
 cd app
 ```
-4. Install the required dependencies
+5. Install the required dependencies
 ```
 pip install -r requirements.txt
 ```
-5. To run the application, run the following command
+6. To run the application, run the following command
 ```
 python app.py
 ```
-6. Visit http://localhost:8000/ in your browser to access the app.
+7. Visit http://localhost:8000/ in your browser to access the app.
 
 Now, you're ready to start using Wave!
 
